@@ -29,7 +29,7 @@ namespace SistemaFerreteria
         {
             CargarComboRoles();
             RefrescarGrid();
-            LimpiarCampos(); // CORREGIDO: Reemplaza a EstadoBotonesInicial para centralizar el inicio
+            LimpiarCampos(); 
         }
 
         private void CargarComboRoles()

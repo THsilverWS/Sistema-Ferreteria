@@ -65,5 +65,13 @@ namespace SistemaFerreteria
             frm.MdiParent = this;
             frm.Show();
         }
+
+        private void cargosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormUsuarios frm = new FormUsuarios();
+            frm.MdiParent = this;
+            frm.Show();
+        }
     }
+    
 }

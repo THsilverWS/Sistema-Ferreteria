@@ -62,14 +62,14 @@
             // productosToolStripMenuItem
             // 
             productosToolStripMenuItem.Name = "productosToolStripMenuItem";
-            productosToolStripMenuItem.Size = new Size(180, 22);
+            productosToolStripMenuItem.Size = new Size(139, 22);
             productosToolStripMenuItem.Text = "Productos";
             productosToolStripMenuItem.Click += productosToolStripMenuItem_Click;
             // 
             // proveedoresToolStripMenuItem
             // 
             proveedoresToolStripMenuItem.Name = "proveedoresToolStripMenuItem";
-            proveedoresToolStripMenuItem.Size = new Size(180, 22);
+            proveedoresToolStripMenuItem.Size = new Size(139, 22);
             proveedoresToolStripMenuItem.Text = "Proveedores";
             // 
             // procesosToolStripMenuItem
@@ -82,28 +82,28 @@
             // inventarioToolStripMenuItem
             // 
             inventarioToolStripMenuItem.Name = "inventarioToolStripMenuItem";
-            inventarioToolStripMenuItem.Size = new Size(180, 22);
+            inventarioToolStripMenuItem.Size = new Size(167, 22);
             inventarioToolStripMenuItem.Text = "Inventario";
             inventarioToolStripMenuItem.Click += inventarioToolStripMenuItem_Click;
             // 
             // categoriasToolStripMenuItem
             // 
             categoriasToolStripMenuItem.Name = "categoriasToolStripMenuItem";
-            categoriasToolStripMenuItem.Size = new Size(180, 22);
+            categoriasToolStripMenuItem.Size = new Size(167, 22);
             categoriasToolStripMenuItem.Text = "Categorias";
             categoriasToolStripMenuItem.Click += categoriasToolStripMenuItem_Click;
             // 
             // metodosDePagoToolStripMenuItem
             // 
             metodosDePagoToolStripMenuItem.Name = "metodosDePagoToolStripMenuItem";
-            metodosDePagoToolStripMenuItem.Size = new Size(180, 22);
+            metodosDePagoToolStripMenuItem.Size = new Size(167, 22);
             metodosDePagoToolStripMenuItem.Text = "Metodos de Pago";
             metodosDePagoToolStripMenuItem.Click += metodosDePagoToolStripMenuItem_Click;
             // 
             // estantesToolStripMenuItem
             // 
             estantesToolStripMenuItem.Name = "estantesToolStripMenuItem";
-            estantesToolStripMenuItem.Size = new Size(180, 22);
+            estantesToolStripMenuItem.Size = new Size(167, 22);
             estantesToolStripMenuItem.Text = "Estantes";
             estantesToolStripMenuItem.Click += estantesToolStripMenuItem_Click;
             // 
@@ -125,7 +125,8 @@
             // 
             cargosToolStripMenuItem.Name = "cargosToolStripMenuItem";
             cargosToolStripMenuItem.Size = new Size(180, 22);
-            cargosToolStripMenuItem.Text = "Cargos";
+            cargosToolStripMenuItem.Text = "Usuarios";
+            cargosToolStripMenuItem.Click += cargosToolStripMenuItem_Click;
             // 
             // FormAvanzado
             // 

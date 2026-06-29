@@ -185,10 +185,10 @@ namespace SistemaFerreteria.Model
                 est_empleado = @estado
             WHERE dni_empleado = @dni;";
 
-        using (SqlCommand cmd = new SqlCommand(query, con))
+                using (SqlCommand cmd = new SqlCommand(query, con))
                 {
                     cmd.Parameters.AddWithValue("@dni", dni);
-            cmd.Parameters.AddWithValue("@nombre", nombre);
+                    cmd.Parameters.AddWithValue("@nombre", nombre);
                     cmd.Parameters.AddWithValue("@idRol", idRol);
                     cmd.Parameters.AddWithValue("@fecha", fechaAñadido);
                     cmd.Parameters.AddWithValue("@estado", estado ? 1 : 0); // 1 = Activo, 0 = Inactivo[cite: 1]
@@ -199,6 +199,94 @@ namespace SistemaFerreteria.Model
                         return cmd.ExecuteNonQuery() > 0;
                     }
                     catch (Exception ex) { throw new Exception("Error en Modificar: " + ex.Message); }
+                }
+            }
+        }
+
+        // =========================================================================
+        // 🔑 MÉTODOS ADICIONALES PARA EL PANEL DE USUARIOS
+        // =========================================================================
+
+        /// <summary>
+        /// Obtiene la lista de empleados que ya cuentan con un usuario asignado para el panel de credenciales.
+        /// </summary>
+        public DataTable ObtenerUsuariosParaPanel()
+        {
+            DataTable dt = new DataTable();
+            using (SqlConnection con = conexionBase.ObtenerConexion())
+            {
+                string query = @"
+                    SELECT 
+                        ROW_NUMBER() OVER (ORDER BY E.nom_empleado ASC) AS [ID],
+                        E.dni_empleado AS [DNI],
+                        E.nom_empleado AS [Empleado],
+                        E.usu_empleado AS [Usuario],
+                        E.con_empleado AS [Contraseña],
+                        R.nom_rol AS [Cargo]
+                    FROM Empleados E
+                    INNER JOIN Roles R ON E.id_rol = R.id_rol
+                    WHERE E.est_empleado = 1 AND E.usu_empleado <> '';";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    try
+                    {
+                        con.Open();
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd)) { da.Fill(dt); }
+                    }
+                    catch (Exception ex) { throw new Exception("Error al cargar usuarios: " + ex.Message); }
+                }
+            }
+            return dt;
+        }
+
+        /// <summary>
+        /// Obtiene todos los empleados activos para vincularlos en el ComboBox del panel de Usuarios.
+        /// </summary>
+        public DataTable ObtenerEmpleadosActivos()
+        {
+            DataTable dt = new DataTable();
+            using (SqlConnection con = conexionBase.ObtenerConexion())
+            {
+                string query = "SELECT dni_empleado, nom_empleado, id_rol FROM Empleados WHERE est_empleado = 1;";
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    try
+                    {
+                        con.Open();
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd)) { da.Fill(dt); }
+                    }
+                    catch (Exception ex) { throw new Exception("Error al cargar lista de empleados: " + ex.Message); }
+                }
+            }
+            return dt;
+        }
+
+        /// <summary>
+        /// Actualiza o asigna las credenciales de acceso (Usuario y Contraseña) basadas en el DNI.
+        /// </summary>
+        public bool ActualizarCredenciales(string dni, string usuario, string contraseña)
+        {
+            using (SqlConnection con = conexionBase.ObtenerConexion())
+            {
+                string query = @"
+                    UPDATE Empleados 
+                    SET usu_empleado = @usuario, 
+                        con_empleado = @contraseña
+                    WHERE dni_empleado = @dni;";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@dni", dni);
+                    cmd.Parameters.AddWithValue("@usuario", usuario);
+                    cmd.Parameters.AddWithValue("@contraseña", contraseña);
+
+                    try
+                    {
+                        con.Open();
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
+                    catch (Exception ex) { throw new Exception("Error al actualizar credenciales: " + ex.Message); }
                 }
             }
         }
