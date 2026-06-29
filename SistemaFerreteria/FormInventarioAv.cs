@@ -64,7 +64,6 @@ namespace SistemaFerreteria
 
                 // Ocultamos los IDs internos para que el usuario no se confunda
                 //if (dgvInventario.Columns.Contains("ID Producto")) dgvInventario.Columns["ID Producto"].Visible = false;
-                if (dgvInventario.Columns.Contains("ID Almacen")) dgvInventario.Columns["ID Almacen"].Visible = false;
             }
             catch (Exception ex)
             {
@@ -104,7 +103,6 @@ namespace SistemaFerreteria
 
                 // Guardamos los IDs reales en memoria de forma segura[cite: 3]
                 idProductoSeleccionado = Convert.ToInt32(fila.Cells["ID Producto"].Value);
-                idAlmacenSeleccionado = Convert.ToInt32(fila.Cells["ID Almacen"].Value);
 
                 // Rellenamos las cajas de texto (txtProducto y txtAlmacen deben estar bloqueados/ReadOnly)[cite: 3]
                 txtProducto.Text = fila.Cells["Producto"].Value.ToString();

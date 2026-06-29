@@ -77,6 +77,7 @@ namespace SistemaFerreteria.Model
                     try
                     {
                         con.Open();
+                        conexionBase.AsignarContextoSeguridad(con);
                         cmdProd.ExecuteNonQuery();
                         return true;
                     }
@@ -229,6 +230,7 @@ namespace SistemaFerreteria.Model
                     try
                     {
                         con.Open();
+                        conexionBase.AsignarContextoSeguridad(con);
                         int filasAfectadas = cmd.ExecuteNonQuery();
                         return filasAfectadas > 0;
                     }
@@ -257,6 +259,7 @@ namespace SistemaFerreteria.Model
                     try
                     {
                         con.Open();
+                        conexionBase.AsignarContextoSeguridad(con);
                         int filasAfectadas = cmd.ExecuteNonQuery();
                         return filasAfectadas > 0;
                     }

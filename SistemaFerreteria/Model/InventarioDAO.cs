@@ -42,6 +42,7 @@ namespace SistemaFerreteria.Model
                     try
                     {
                         con.Open();
+
                         using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                         {
                             da.Fill(tabla);
@@ -98,6 +99,7 @@ namespace SistemaFerreteria.Model
                     try
                     {
                         con.Open();
+                        conexionBase.AsignarContextoSeguridad(con);
                         return cmd.ExecuteNonQuery() > 0;
                     }
                     catch (Exception ex)

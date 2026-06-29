@@ -37,6 +37,9 @@ namespace SistemaFerreteria
                     string dniEmpleado = dtUsuario.Rows[0]["dni_empleado"].ToString();
                     string rolUsuario = dtUsuario.Rows[0]["nom_rol"].ToString().Trim();
 
+                    // 🌟 CORREGIDO: Ahora usamos la variable que ya creaste arriba
+                    UsuarioSesion.DniEmpleadoLogueado = dniEmpleado;
+
                     MessageBox.Show($"¡Bienvenido! Rol: {rolUsuario}",
                         "Acceso Concedido",
                         MessageBoxButtons.OK,

@@ -128,6 +128,7 @@ namespace SistemaFerreteria.Model
                     try
                     {
                         con.Open();
+                        conexionBase.AsignarContextoSeguridad(con);
                         return cmd.ExecuteNonQuery() > 0;
                     }
                     catch (Exception ex)
@@ -141,38 +142,9 @@ namespace SistemaFerreteria.Model
         // =========================================================================
         // 🔄 MODIFICAR EMPLEADO (UPDATE basado en el DNI)
         // =========================================================================
-        public bool ModificarEmpleado(string dni, string nombre, string usuario, int idRol, DateTime fechaAñadido)
-        {
-            using (SqlConnection con = conexionBase.ObtenerConexion())
-            {
-                // Actualiza el perfil del empleado y su fecha de añadido usando el DNI como filtro
-                string query = @"
-            UPDATE Empleados 
-            SET nom_empleado = @nombre, 
-                id_rol = @idRol,
-                fec_añadido = @fecha
-            WHERE dni_empleado = @dni;";
 
-                using (SqlCommand cmd = new SqlCommand(query, con))
-                {
-                    cmd.Parameters.AddWithValue("@dni", dni);
-                    cmd.Parameters.AddWithValue("@nombre", nombre);
-                    cmd.Parameters.AddWithValue("@idRol", idRol);
-                    cmd.Parameters.AddWithValue("@fecha", fechaAñadido);
 
-                    try
-                    {
-                        con.Open();
-                        return cmd.ExecuteNonQuery() > 0;
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("Error base de datos (Modificar): " + ex.Message);
-                    }
-                }
-            }
 
-        }
         public bool ModificarEmpleadoConEstado(string dni, string nombre, int idRol, DateTime fechaAñadido, bool estado)
         {
             using (SqlConnection con = conexionBase.ObtenerConexion())
@@ -181,21 +153,23 @@ namespace SistemaFerreteria.Model
             UPDATE Empleados 
             SET nom_empleado = @nombre, 
                 id_rol = @idRol,
-                fec_añadido = @fecha,
                 est_empleado = @estado
-            WHERE dni_empleado = @dni;";
+            WHERE dni_empleado = @dni;"; // (Ajustado sin fec_añadido si lo manejas aparte)[cite: 1, 4]
 
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
                     cmd.Parameters.AddWithValue("@dni", dni);
-                    cmd.Parameters.AddWithValue("@nombre", nombre);
+            cmd.Parameters.AddWithValue("@nombre", nombre);
                     cmd.Parameters.AddWithValue("@idRol", idRol);
-                    cmd.Parameters.AddWithValue("@fecha", fechaAñadido);
-                    cmd.Parameters.AddWithValue("@estado", estado ? 1 : 0); // 1 = Activo, 0 = Inactivo[cite: 1]
+                    cmd.Parameters.AddWithValue("@estado", estado ? 1 : 0);
 
-                    try
+            try
                     {
                         con.Open();
+
+                        // 🌟 LLAMADA CLAVE: Le inyectamos el DNI del que está clickeando el botón antes del execute
+                        conexionBase.AsignarContextoSeguridad(con);
+
                         return cmd.ExecuteNonQuery() > 0;
                     }
                     catch (Exception ex) { throw new Exception("Error en Modificar: " + ex.Message); }
@@ -284,6 +258,7 @@ namespace SistemaFerreteria.Model
                     try
                     {
                         con.Open();
+                        conexionBase.AsignarContextoSeguridad(con);
                         return cmd.ExecuteNonQuery() > 0;
                     }
                     catch (Exception ex) { throw new Exception("Error al actualizar credenciales: " + ex.Message); }

@@ -63,6 +63,7 @@ namespace SistemaFerreteria.Model
                 {
                     cmd.Parameters.AddWithValue("@Valor", valorTexto);
                     con.Open();
+                    conexionBase.AsignarContextoSeguridad(con);
                     return cmd.ExecuteNonQuery() > 0;
                 }
             }
@@ -80,6 +81,7 @@ namespace SistemaFerreteria.Model
                     cmd.Parameters.AddWithValue("@NuevoTexto", nuevoTexto);
                     cmd.Parameters.AddWithValue("@Id", idRegistro);
                     con.Open();
+                    conexionBase.AsignarContextoSeguridad(con);
                     return cmd.ExecuteNonQuery() > 0;
                 }
             }
@@ -96,6 +98,7 @@ namespace SistemaFerreteria.Model
                 {
                     cmd.Parameters.AddWithValue("@Id", idRegistro);
                     con.Open();
+                    conexionBase.AsignarContextoSeguridad(con);
                     return cmd.ExecuteNonQuery() > 0;
                 }
             }
