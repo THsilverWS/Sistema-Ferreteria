@@ -158,6 +158,7 @@
             btnExportar.TabIndex = 10;
             btnExportar.Text = "Exportar";
             btnExportar.UseVisualStyleBackColor = true;
+            btnExportar.Click += btnExportar_Click;
             // 
             // btnImportar
             // 
@@ -167,6 +168,7 @@
             btnImportar.TabIndex = 11;
             btnImportar.Text = "Importar";
             btnImportar.UseVisualStyleBackColor = true;
+            btnImportar.Click += btnImportar_Click;
             // 
             // btnFiltrar
             // 

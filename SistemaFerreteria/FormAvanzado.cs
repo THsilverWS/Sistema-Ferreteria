@@ -58,5 +58,12 @@ namespace SistemaFerreteria
             frm.MdiParent = this;
             frm.Show();
         }
+
+        private void empleadosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormEmpleadosAv frm = new FormEmpleadosAv();
+            frm.MdiParent = this;
+            frm.Show();
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace SistemaFerreteria
     {
         private readonly MantenimientoComunDAO _dao = new MantenimientoComunDAO();
         private readonly string _tipoMantenimiento;
-        public FormMantenedorComun( string tipo)
+        public FormMantenedorComun(string tipo)
         {
             InitializeComponent();
             _tipoMantenimiento = tipo;
@@ -139,6 +139,22 @@ namespace SistemaFerreteria
         private void btnFiltrar_Click(object sender, EventArgs e)
         {
             RefrescarTabla(txtNombre.Text.Trim());
+        }
+
+        private void btnExportar_Click(object sender, EventArgs e)
+        {
+            DataTable dt = (DataTable)dgvDatos.DataSource;
+            FormExportarImportar frm = new FormExportarImportar("EXPORTAR", _tipoMantenimiento, dt);
+            frm.ShowDialog();
+        }
+
+        private void btnImportar_Click(object sender, EventArgs e)
+        {
+            FormExportarImportar frm = new FormExportarImportar("IMPORTAR", _tipoMantenimiento, null);
+    if (frm.ShowDialog() == DialogResult.OK)
+    {
+                RefrescarTabla(); // Recarga la grilla al terminar[cite: 2, 3]
+            }
         }
     }
 }

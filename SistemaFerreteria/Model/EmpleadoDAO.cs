@@ -49,5 +49,159 @@ namespace SistemaFerreteria.Model
             }
             return resultado;
         }
+        public DataTable ObtenerEmpleadosParaPanel()
+        {
+            DataTable dt = new DataTable();
+            using (SqlConnection con = conexionBase.ObtenerConexion())
+            {
+                // Usamos un CASE para transformar el bit (1 o 0) en un texto limpio para tu grilla[cite: 1]
+                string query = @"
+            SELECT 
+                ROW_NUMBER() OVER (ORDER BY E.fec_añadido ASC) AS [ID],
+                E.dni_empleado AS [DNI],
+                E.nom_empleado AS [Empleado],
+                R.nom_rol AS [Cargo],
+                CONVERT(VARCHAR(10), E.fec_añadido, 103) AS [Fecha de Añadido],
+                CASE WHEN E.est_empleado = 1 THEN 'Activo' ELSE 'Inactivo' END AS [Estado]
+            FROM Empleados E
+            INNER JOIN Roles R ON E.id_rol = R.id_rol;"; // Quitamos el filtro WHERE para verlos a todos
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    try
+                    {
+                        con.Open();
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd)) { da.Fill(dt); }
+                    }
+                    catch (Exception ex) { throw new Exception("Error: " + ex.Message); }
+                }
+            }
+            return dt;
+        }
+        public DataTable ObtenerRoles()
+        {
+            DataTable dt = new DataTable();
+            using (SqlConnection con = conexionBase.ObtenerConexion())
+            {
+                // Traemos el ID y el Nombre de los cargos para llenar el ComboBox
+                string query = "SELECT id_rol, nom_rol FROM Roles ORDER BY nom_rol ASC;";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    try
+                    {
+                        con.Open();
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Error al obtener los roles/cargos: " + ex.Message);
+                    }
+                }
+            }
+            return dt;
+        }
+        // =========================================================================
+        // 🚀 INSERTAR EMPLEADO (Sin usuario ni contraseña por ahora)
+        // =========================================================================
+        public bool InsertarEmpleado(string dni, string nombre, string usuario, string contraseña, int idRol, DateTime fechaAñadido)
+        {
+            using (SqlConnection con = conexionBase.ObtenerConexion())
+            {
+                // Nota que incluimos fec_añadido en la consulta SQL
+                string query = @"
+            INSERT INTO Empleados (dni_empleado, nom_empleado, usu_empleado, con_empleado, id_rol, est_empleado, fec_añadido)
+            VALUES (@dni, @nombre, @usuario, @contraseña, @idRol, 1, @fecha);";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@dni", dni);
+                    cmd.Parameters.AddWithValue("@nombre", nombre);
+                    cmd.Parameters.AddWithValue("@usuario", usuario); // Mandará "" según el formulario
+                    cmd.Parameters.AddWithValue("@contraseña", contraseña); // Mandará "" según el formulario
+                    cmd.Parameters.AddWithValue("@idRol", idRol);
+                    cmd.Parameters.AddWithValue("@fecha", fechaAñadido);
+
+                    try
+                    {
+                        con.Open();
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Error base de datos (Insertar): " + ex.Message);
+                    }
+                }
+            }
+        }
+
+        // =========================================================================
+        // 🔄 MODIFICAR EMPLEADO (UPDATE basado en el DNI)
+        // =========================================================================
+        public bool ModificarEmpleado(string dni, string nombre, string usuario, int idRol, DateTime fechaAñadido)
+        {
+            using (SqlConnection con = conexionBase.ObtenerConexion())
+            {
+                // Actualiza el perfil del empleado y su fecha de añadido usando el DNI como filtro
+                string query = @"
+            UPDATE Empleados 
+            SET nom_empleado = @nombre, 
+                id_rol = @idRol,
+                fec_añadido = @fecha
+            WHERE dni_empleado = @dni;";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@dni", dni);
+                    cmd.Parameters.AddWithValue("@nombre", nombre);
+                    cmd.Parameters.AddWithValue("@idRol", idRol);
+                    cmd.Parameters.AddWithValue("@fecha", fechaAñadido);
+
+                    try
+                    {
+                        con.Open();
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Error base de datos (Modificar): " + ex.Message);
+                    }
+                }
+            }
+
+        }
+        public bool ModificarEmpleadoConEstado(string dni, string nombre, int idRol, DateTime fechaAñadido, bool estado)
+        {
+            using (SqlConnection con = conexionBase.ObtenerConexion())
+            {
+                string query = @"
+            UPDATE Empleados 
+            SET nom_empleado = @nombre, 
+                id_rol = @idRol,
+                fec_añadido = @fecha,
+                est_empleado = @estado
+            WHERE dni_empleado = @dni;";
+
+        using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@dni", dni);
+            cmd.Parameters.AddWithValue("@nombre", nombre);
+                    cmd.Parameters.AddWithValue("@idRol", idRol);
+                    cmd.Parameters.AddWithValue("@fecha", fechaAñadido);
+                    cmd.Parameters.AddWithValue("@estado", estado ? 1 : 0); // 1 = Activo, 0 = Inactivo[cite: 1]
+
+                    try
+                    {
+                        con.Open();
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
+                    catch (Exception ex) { throw new Exception("Error en Modificar: " + ex.Message); }
+                }
+            }
+        }
+
     }
 }

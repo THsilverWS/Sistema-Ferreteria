@@ -258,25 +258,25 @@ namespace SistemaFerreteria
 
         private void btnExportar_Click(object sender, EventArgs e)
         {
-            DataTable dt = (DataTable)dgvProductos.DataSource;
-            if (dt == null || dt.Rows.Count == 0)
+            DataTable dt = (DataTable)dgvProductos.DataSource; //[cite: 4]
+            if (dt == null || dt.Rows.Count == 0) //[cite: 4]
             {
-                MessageBox.Show("No hay datos para exportar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                MessageBox.Show("No hay datos para exportar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning); //[cite: 4]
+                return; //[cite: 4]
             }
 
-            // Abrimos tu interfaz personalizada en modo EXPORTAR
-            FormExportarImportar ventanaExportar = new FormExportarImportar("EXPORTAR", dt);
-            ventanaExportar.ShowDialog();
+            // AJUSTADO: Ahora le pasamos el tipo "PRODUCTO" como segundo parámetro
+            FormExportarImportar ventanaExportar = new FormExportarImportar("EXPORTAR", "PRODUCTO", dt); //
+            ventanaExportar.ShowDialog(); //[cite: 4]
         }
 
         private void btnImportar_Click(object sender, EventArgs e)
         {
-            // Abrimos tu interfaz personalizada en modo IMPORTAR
-            FormExportarImportar ventanaImportar = new FormExportarImportar("IMPORTAR", null);
-            if (ventanaImportar.ShowDialog() == DialogResult.OK)
+            // AJUSTADO: Ahora le pasamos el tipo "PRODUCTO" y 'null' en la tabla
+            FormExportarImportar ventanaImportar = new FormExportarImportar("IMPORTAR", "PRODUCTO", null); //
+            if (ventanaImportar.ShowDialog() == DialogResult.OK) //[cite: 4]
             {
-                RefrescarTabla(); // Si importó con éxito, refresca la grilla principal automáticamente[cite: 2]
+                RefrescarTabla(); // Si importó con éxito, refresca la grilla principal automáticamente[cite: 4]
             }
         }
 

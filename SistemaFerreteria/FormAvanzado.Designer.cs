@@ -37,12 +37,15 @@
             categoriasToolStripMenuItem = new ToolStripMenuItem();
             metodosDePagoToolStripMenuItem = new ToolStripMenuItem();
             estantesToolStripMenuItem = new ToolStripMenuItem();
+            personalToolStripMenuItem = new ToolStripMenuItem();
+            empleadosToolStripMenuItem = new ToolStripMenuItem();
+            cargosToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { mantenimientoToolStripMenuItem, procesosToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { mantenimientoToolStripMenuItem, procesosToolStripMenuItem, personalToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(800, 24);
@@ -104,6 +107,26 @@
             estantesToolStripMenuItem.Text = "Estantes";
             estantesToolStripMenuItem.Click += estantesToolStripMenuItem_Click;
             // 
+            // personalToolStripMenuItem
+            // 
+            personalToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { empleadosToolStripMenuItem, cargosToolStripMenuItem });
+            personalToolStripMenuItem.Name = "personalToolStripMenuItem";
+            personalToolStripMenuItem.Size = new Size(64, 20);
+            personalToolStripMenuItem.Text = "Personal";
+            // 
+            // empleadosToolStripMenuItem
+            // 
+            empleadosToolStripMenuItem.Name = "empleadosToolStripMenuItem";
+            empleadosToolStripMenuItem.Size = new Size(180, 22);
+            empleadosToolStripMenuItem.Text = "Empleados";
+            empleadosToolStripMenuItem.Click += empleadosToolStripMenuItem_Click;
+            // 
+            // cargosToolStripMenuItem
+            // 
+            cargosToolStripMenuItem.Name = "cargosToolStripMenuItem";
+            cargosToolStripMenuItem.Size = new Size(180, 22);
+            cargosToolStripMenuItem.Text = "Cargos";
+            // 
             // FormAvanzado
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -132,5 +155,8 @@
         private ToolStripMenuItem categoriasToolStripMenuItem;
         private ToolStripMenuItem metodosDePagoToolStripMenuItem;
         private ToolStripMenuItem estantesToolStripMenuItem;
+        private ToolStripMenuItem personalToolStripMenuItem;
+        private ToolStripMenuItem empleadosToolStripMenuItem;
+        private ToolStripMenuItem cargosToolStripMenuItem;
     }
 }
