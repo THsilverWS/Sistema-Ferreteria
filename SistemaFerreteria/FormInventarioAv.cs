@@ -15,8 +15,7 @@ namespace SistemaFerreteria
         private int paginaActual = 1;
         private int tamañoPagina = 10;
 
-        private int idProductoSeleccionado = -1;
-        private int idAlmacenSeleccionado = -1;
+        private int idProductoSeleccionado = -1; // 🌟 Solo necesitamos el ID del Producto
 
         public FormInventarioAv()
         {
@@ -28,7 +27,8 @@ namespace SistemaFerreteria
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-            if (idProductoSeleccionado == -1 || idAlmacenSeleccionado == -1)
+            // 🌟 Removida la validación de idAlmacenSeleccionado
+            if (idProductoSeleccionado == -1)
             {
                 MessageBox.Show("Por favor, seleccione una fila del inventario para modificar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -39,8 +39,9 @@ namespace SistemaFerreteria
                 int nuevoStock = Convert.ToInt32(numStockActual.Value);
                 int nuevoMinimo = Convert.ToInt32(numStockMinimo.Value);
 
-                // Modifica el stock de esa combinación exacta
-                bool exito = _inventarioDao.UpdateStock(idProductoSeleccionado, idAlmacenSeleccionado, nuevoStock, nuevoMinimo);
+                // 🌟 Ahora actualiza usando el método adaptado de tu DAO (sin almacén)
+                // Nota: Asegúrate de que el método en InventarioDAO reciba solo (idProducto, stockActual, stockMinimo)
+                bool exito = _inventarioDao.UpdateStock(idProductoSeleccionado, nuevoStock, nuevoMinimo);
 
                 if (exito)
                 {
@@ -54,6 +55,7 @@ namespace SistemaFerreteria
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void RefrescarTabla()
         {
             try
@@ -62,8 +64,9 @@ namespace SistemaFerreteria
                 dgvInventario.DataSource = _inventarioDao.ObtenerInventarioPorPagina(paginaActual, tamañoPagina, filtro);
                 lblPagina.Text = $"Página: {paginaActual}";
 
-                // Ocultamos los IDs internos para que el usuario no se confunda
-                //if (dgvInventario.Columns.Contains("ID Producto")) dgvInventario.Columns["ID Producto"].Visible = false;
+                // Ocultamos el ID interno para que la grilla se vea más limpia
+                if (dgvInventario.Columns.Contains("ID Producto"))
+                    dgvInventario.Columns["ID Producto"].Visible = false;
             }
             catch (Exception ex)
             {
@@ -101,12 +104,11 @@ namespace SistemaFerreteria
             {
                 DataGridViewRow fila = dgvInventario.Rows[e.RowIndex];
 
-                // Guardamos los IDs reales en memoria de forma segura[cite: 3]
+                // Guardamos el ID real en memoria de forma segura[cite: 11]
                 idProductoSeleccionado = Convert.ToInt32(fila.Cells["ID Producto"].Value);
 
-                // Rellenamos las cajas de texto (txtProducto y txtAlmacen deben estar bloqueados/ReadOnly)[cite: 3]
+                // 🌟 Mapeo sin columnas de Almacén
                 txtProducto.Text = fila.Cells["Producto"].Value.ToString();
-                txtAlmacen.Text = fila.Cells["Almacén"].Value.ToString();
                 numStockActual.Value = Convert.ToInt32(fila.Cells["Stock Actual"].Value);
                 numStockMinimo.Value = Convert.ToInt32(fila.Cells["Stock Mínimo"].Value);
                 txtIdProducto.Text = fila.Cells["ID Producto"].Value.ToString();
@@ -121,9 +123,11 @@ namespace SistemaFerreteria
         private void LimpiarCampos()
         {
             idProductoSeleccionado = -1;
-            idAlmacenSeleccionado = -1;
             txtProducto.Clear();
-            txtAlmacen.Clear();
+
+            // 🌟 Si te quedó el TextBox txtAlmacen en la interfaz visual, puedes ocultarlo o dejarlo así
+            if (txtAlmacen != null) txtAlmacen.Clear();
+
             numStockActual.Value = 0;
             numStockMinimo.Value = 5;
             txtIdProducto.Clear();

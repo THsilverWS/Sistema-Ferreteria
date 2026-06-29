@@ -16,20 +16,18 @@ namespace SistemaFerreteria.Model
 
             using (SqlConnection con = conexionBase.ObtenerConexion())
             {
+                // 🌟 CORREGIDO: Eliminamos el INNER JOIN con Almacen y sus columnas de la consulta
                 string query = @"
                     SELECT 
                         i.id_producto AS [ID Producto],
                         p.nom_producto AS [Producto],
-                        i.id_almacen AS [ID Almacen],
-                        a.nom_almacen AS [Almacén], -- Ajusta si el campo en la tabla Almacen se llama diferente
                         i.stock_actual AS [Stock Actual],
                         i.stock_minimo AS [Stock Mínimo],
                         i.fec_actualizacion AS [Última Actualización]
                     FROM Inventario i
                     INNER JOIN Productos p ON i.id_producto = p.id_producto
-                    INNER JOIN Almacen a ON i.id_almacen = a.id_almacen
                     WHERE p.nom_producto LIKE @Buscar
-                    ORDER BY i.id_producto, i.id_almacen
+                    ORDER BY i.id_producto
                     OFFSET @Saltar ROWS
                     FETCH NEXT @Traer ROWS ONLY;";
 
@@ -42,7 +40,6 @@ namespace SistemaFerreteria.Model
                     try
                     {
                         con.Open();
-
                         using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                         {
                             da.Fill(tabla);
@@ -79,26 +76,27 @@ namespace SistemaFerreteria.Model
         }
 
         // 3. Actualizar los niveles de stock (Fijando la PK compuesta)
-        public bool UpdateStock(int idProducto, int idAlmacen, int stockActual, int stockMinimo)
+        public bool UpdateStock(int idProducto, int stockActual, int stockMinimo)
         {
             using (SqlConnection con = conexionBase.ObtenerConexion())
             {
+                // Quitamos id_almacen del WHERE ya que el stock ahora es global por producto
                 string query = @"UPDATE Inventario 
-                                 SET stock_actual = @StockActual, 
-                                     stock_minimo = @StockMinimo, 
-                                     fec_actualizacion = GETDATE()
-                                 WHERE id_producto = @IdProducto AND id_almacen = @IdAlmacen;";
+                         SET stock_actual = @StockActual, 
+                             stock_minimo = @StockMinimo, 
+                             fec_actualizacion = GETDATE()
+                         WHERE id_producto = @IdProducto;";
 
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
                     cmd.Parameters.AddWithValue("@StockActual", stockActual);
                     cmd.Parameters.AddWithValue("@StockMinimo", stockMinimo);
                     cmd.Parameters.AddWithValue("@IdProducto", idProducto);
-                    cmd.Parameters.AddWithValue("@IdAlmacen", idAlmacen);
 
                     try
                     {
                         con.Open();
+                        // Inyectamos el contexto para la auditoría que acabamos de armar
                         conexionBase.AsignarContextoSeguridad(con);
                         return cmd.ExecuteNonQuery() > 0;
                     }

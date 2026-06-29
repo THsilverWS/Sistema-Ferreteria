@@ -2,12 +2,14 @@
 using System;
 using System.Data;
 using System.Windows.Forms;
+using SistemaFerreteria.Model; // 🌟 Agregado para usar tu clase centralizada Conexion
 
 namespace SistemaFerreteria
 {
     public partial class FormGestionPersonal : Form
     {
-        private string connectionString = "Server=.; Database=Ferreteria; Integrated Security=True; TrustServerCertificate=True;";
+        // 🌟 Reemplazamos la cadena directa por tu objeto de conexión centralizado
+        private readonly Conexion conexionBase = new Conexion();
 
         public FormGestionPersonal()
         {
@@ -35,7 +37,7 @@ namespace SistemaFerreteria
             AgregarColumna("dni_empleado", "DNI Personal");
             AgregarColumna("nom_empleado", "Nombre Completo");
             AgregarColumna("usu_empleado", "Nombre de Usuario");
-            AgregarColumna("rol_empleado", "Rol de Acceso");
+            AgregarColumna("nom_rol", "Rol de Acceso"); // 🌟 Sincronizado con la columna del JOIN de Roles
             AgregarColumna("EstadoTexto", "Estado");
 
             // Columna Botón Editar
@@ -72,26 +74,28 @@ namespace SistemaFerreteria
         {
             try
             {
-                using (SqlConnection conexion = new SqlConnection(connectionString))
+                // 🌟 Ajustado con conexionBase
+                using (SqlConnection conexion = conexionBase.ObtenerConexion())
                 {
+                    // 🌟 ACTUALIZADO: INNER JOIN con Roles para traer nom_rol igual que en EmpleadosDAO
                     string query = @"
                         SELECT 
-                            dni_empleado,
-                            nom_empleado,
-                            usu_empleado,
-                            rol_empleado,
-                            est_empleado,
-                            CASE WHEN est_empleado = 1 THEN 'Activo' ELSE 'Inactivo' END AS EstadoTexto
-                        FROM Empleados
+                            E.dni_empleado,
+                            E.nom_empleado,
+                            E.usu_empleado,
+                            R.nom_rol,
+                            E.est_empleado,
+                            CASE WHEN E.est_empleado = 1 THEN 'Activo' ELSE 'Inactivo' END AS EstadoTexto
+                        FROM Empleados E
+                        INNER JOIN Roles R ON E.id_rol = R.id_rol
                         WHERE 1=1";
 
-                    // Añadir filtro dinámico si el TextBox tiene datos
                     if (!string.IsNullOrEmpty(filtroBusqueda))
                     {
-                        query += " AND (nom_empleado LIKE @Filtro OR dni_empleado LIKE @Filtro OR usu_empleado LIKE @Filtro)";
+                        query += " AND (E.nom_empleado LIKE @Filtro OR E.dni_empleado LIKE @Filtro OR E.usu_empleado LIKE @Filtro)";
                     }
 
-                    query += " ORDER BY nom_empleado ASC";
+                    query += " ORDER BY E.nom_empleado ASC";
 
                     using (SqlCommand cmd = new SqlCommand(query, conexion))
                     {
@@ -114,39 +118,27 @@ namespace SistemaFerreteria
             }
         }
 
-        // ============================
-        // 3. BUSCADOR EN TIEMPO REAL
-        // ============================
         private void txtBuscar_TextChanged(object sender, EventArgs e)
         {
-            // Ejecuta el filtro directamente en la consulta a la base de datos local
             CargarPersonal(txtBuscar.Text.Trim());
         }
 
-        // ====================
-        // 4. ACCIONES DEL GRID 
-        // ====================
         private void dgvPersonal_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
             {
-                // Obtenemos la fila seleccionada
                 DataRowView filaSeleccionada = (DataRowView)dgvPersonal.Rows[e.RowIndex].DataBoundItem;
 
                 string dniEmpleado = filaSeleccionada["dni_empleado"].ToString();
                 string nombreEmpleado = filaSeleccionada["nom_empleado"].ToString();
 
-                // Caso Botón Editar
                 if (dgvPersonal.Columns[e.ColumnIndex].Name == "btnEditar")
                 {
                     FormEditarPersonal formEdicion = new FormEditarPersonal(dniEmpleado);
                     formEdicion.ShowDialog();
-
-                    // Al cerrar el diálogo, refrescamos los datos del grid
                     CargarPersonal();
                 }
 
-                // Caso Botón Eliminar
                 if (dgvPersonal.Columns[e.ColumnIndex].Name == "btnEliminar")
                 {
                     DialogResult dr = MessageBox.Show($"¿Seguro que quieres eliminar al usuario {nombreEmpleado} del sistema?",
@@ -166,9 +158,15 @@ namespace SistemaFerreteria
         {
             try
             {
-                using (SqlConnection conexion = new SqlConnection(connectionString))
+                // 🌟 Ajustado con conexionBase
+                using (SqlConnection conexion = conexionBase.ObtenerConexion())
                 {
                     conexion.Open();
+
+                    // =========================================================================
+                    // 🌟 FIRMAMOS EL CONTEXTO DE SEGURIDAD PARA QUE EL TRIGGER SEPA QUIÉN ELIMINÓ
+                    // =========================================================================
+                    conexionBase.AsignarContextoSeguridad(conexion);
 
                     string query = "DELETE FROM Empleados WHERE dni_empleado = @dni";
 
@@ -184,7 +182,6 @@ namespace SistemaFerreteria
             }
             catch (SqlException ex) when (ex.Number == 547)
             {
-                // Captura el error si el empleado ya está asociado a un registro en la tabla Ventas
                 MessageBox.Show("No se puede eliminar a este empleado porque tiene boletas registradas a su nombre en el historial técnico.",
                                 "Restricción de Integridad", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }

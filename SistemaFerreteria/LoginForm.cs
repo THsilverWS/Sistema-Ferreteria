@@ -57,9 +57,19 @@ namespace SistemaFerreteria
                     }
                     else
                     {
+                        // 1. Guardamos el DNI en la sesión global para que esté disponible en todos lados[cite: 1, 2]
+                        UsuarioSesion.DniEmpleadoLogueado = dniEmpleado;
+
+                        // 2. Instanciamos el Menú Principal (Form1)[cite: 1]
                         Form1 formularioPrincipal = new Form1(rolUsuario, dniEmpleado);
-                        formularioPrincipal.FormClosed += (s, args) => this.Close();
+                        formularioPrincipal.FormClosed += (s, args) => this.Close(); // Si se cierra Form1, muere la app
                         formularioPrincipal.Show();
+
+                        // 3. 🌟 INSTANCIAMOS Y ABRIMOS TAMBIÉN EL FORM DE VENTAS DE GOLPE
+                        FormVentas formularioVentas = new FormVentas(dniEmpleado);
+                        formularioVentas.Show(); // Usamos .Show() para que ambas ventanas queden flotando activas en pantalla
+
+                        this.Hide(); // Ocultamos el login
                     }
 
                     this.Hide();

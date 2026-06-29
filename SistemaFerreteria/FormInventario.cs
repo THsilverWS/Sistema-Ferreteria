@@ -2,12 +2,14 @@
 using System;
 using System.Data;
 using System.Windows.Forms;
+using SistemaFerreteria.Model; // 🌟 Agregado para usar tu clase centralizada Conexion
 
 namespace SistemaFerreteria
 {
     public partial class FormInventario : Form
     {
-        private string connectionString = "Server=.; Database=Ferreteria; Integrated Security=True; TrustServerCertificate=True;";
+        // 🌟 Reemplazamos la cadena directa por tu objeto de conexión centralizado
+        private readonly Conexion conexionBase = new Conexion();
 
         public FormInventario()
         {
@@ -28,8 +30,10 @@ namespace SistemaFerreteria
         {
             try
             {
-                using (SqlConnection conexion = new SqlConnection(connectionString))
+                // 🌟 Ajustado con conexionBase
+                using (SqlConnection conexion = conexionBase.ObtenerConexion())
                 {
+                    // 🌟 CORREGIDO: Eliminamos 'AND I.id_almacen = 1' ya que el inventario ahora es global
                     string query = @"
                         SELECT 
                             P.id_producto AS [Id],
@@ -38,7 +42,7 @@ namespace SistemaFerreteria
                             P.pre_venta AS [Precio],
                             ISNULL(I.stock_actual, 0) AS [Stock]
                         FROM Productos P
-                        LEFT JOIN Inventario I ON P.id_producto = I.id_producto AND I.id_almacen = 1
+                        LEFT JOIN Inventario I ON P.id_producto = I.id_producto
                         ORDER BY P.id_producto DESC";
 
                     using (SqlCommand cmd = new SqlCommand(query, conexion))
@@ -59,10 +63,9 @@ namespace SistemaFerreteria
 
         // ====================================
         // 2. GUARDAR O ACTUALIZAR UN PRODUCTO
-        // ===================================
+        // ====================================
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-            // Validaciones de cajas de texto (Agregamos el campo obligatorio de código de barras)
             if (string.IsNullOrWhiteSpace(txtCodBarras.Text) || string.IsNullOrWhiteSpace(txtNombre.Text) ||
                 string.IsNullOrWhiteSpace(txtPrecio.Text) || string.IsNullOrWhiteSpace(txtStock.Text))
             {
@@ -82,11 +85,18 @@ namespace SistemaFerreteria
                 return;
             }
 
-            using (SqlConnection conexion = new SqlConnection(connectionString))
+            // 🌟 Ajustado con conexionBase
+            using (SqlConnection conexion = conexionBase.ObtenerConexion())
             {
                 try
                 {
                     conexion.Open();
+
+                    // =========================================================================
+                    // 🌟 FIRMAMOS EL CONTEXTO DE SEGURIDAD ANTES DE LA TRANSACCIÓN PARA LOS TRIGGERS
+                    // =========================================================================
+                    conexionBase.AsignarContextoSeguridad(conexion);
+
                     using (SqlTransaction transaccion = conexion.BeginTransaction())
                     {
                         try
@@ -108,8 +118,9 @@ namespace SistemaFerreteria
                                     idProductoGenerado = Convert.ToInt32(cmdProd.ExecuteScalar());
                                 }
 
-                                string queryInv = @"INSERT INTO Inventario (id_producto, id_almacen, stock_actual, stock_minimo, fec_actualizacion) 
-                                                    VALUES (@idProd, 1, @stock, 5, GETDATE());";
+                                // 🌟 CORREGIDO: Removida la columna y el valor de id_almacen en el INSERT
+                                string queryInv = @"INSERT INTO Inventario (id_producto, stock_actual, stock_minimo, fec_actualizacion) 
+                                                    VALUES (@idProd, @stock, 5, GETDATE());";
 
                                 using (SqlCommand cmdInv = new SqlCommand(queryInv, conexion, transaccion))
                                 {
@@ -137,9 +148,10 @@ namespace SistemaFerreteria
                                     cmdUpd.ExecuteNonQuery();
                                 }
 
+                                // 🌟 CORREGIDO: Removido 'AND id_almacen = 1' en el UPDATE
                                 string queryUpdInv = @"UPDATE Inventario 
                                                        SET stock_actual = @stock, fec_actualizacion = GETDATE() 
-                                                       WHERE id_producto = @idProd AND id_almacen = 1";
+                                                       WHERE id_producto = @idProd";
 
                                 using (SqlCommand cmdUpdInv = new SqlCommand(queryUpdInv, conexion, transaccion))
                                 {
@@ -222,11 +234,16 @@ namespace SistemaFerreteria
             {
                 int idProducto = Convert.ToInt32(lblId.Text);
 
-                using (SqlConnection conexion = new SqlConnection(connectionString))
+                // 🌟 Ajustado con conexionBase
+                using (SqlConnection conexion = conexionBase.ObtenerConexion())
                 {
                     try
                     {
                         conexion.Open();
+
+                        // 🌟 FIRMAMOS EL CONTEXTO ANTES DE ELIMINAR PARA LOS TRIGGERS DE LOGS
+                        conexionBase.AsignarContextoSeguridad(conexion);
+
                         using (SqlTransaction transaccion = conexion.BeginTransaction())
                         {
                             try

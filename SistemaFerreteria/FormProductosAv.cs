@@ -258,23 +258,32 @@ namespace SistemaFerreteria
 
         private void btnExportar_Click(object sender, EventArgs e)
         {
-            DataTable dt = (DataTable)dgvProductos.DataSource; //[cite: 4]
-            if (dt == null || dt.Rows.Count == 0) //[cite: 4]
+            try
             {
-                MessageBox.Show("No hay datos para exportar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning); //[cite: 4]
-                return; //[cite: 4]
-            }
+                // 🌟 EN LUGAR DE AGARRAR EL DGV CON LOS 10 REGISTROS, TRAEMOS LOS 100 COMPLETOS DESDE EL DAO
+                DataTable dtCompleto = _productoDao.ListarProductos();
 
-            // AJUSTADO: Ahora le pasamos el tipo "PRODUCTO" como segundo parámetro
-            FormExportarImportar ventanaExportar = new FormExportarImportar("EXPORTAR", "PRODUCTO", dt); //
-            ventanaExportar.ShowDialog(); //[cite: 4]
+                if (dtCompleto == null || dtCompleto.Rows.Count == 0)
+                {
+                    MessageBox.Show("No hay datos en la base de datos para exportar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Le pasamos la tabla completa con los 100 productos a tu ventana flotante
+                FormExportarImportar ventanaExportar = new FormExportarImportar("EXPORTAR", "PRODUCTO", dtCompleto);
+                ventanaExportar.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al recuperar el catálogo completo: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnImportar_Click(object sender, EventArgs e)
         {
             // AJUSTADO: Ahora le pasamos el tipo "PRODUCTO" y 'null' en la tabla
             FormExportarImportar ventanaImportar = new FormExportarImportar("IMPORTAR", "PRODUCTO", null); //
-            if (ventanaImportar.ShowDialog() == DialogResult.OK) //[cite: 4]
+            if (ventanaImportar.ShowDialog() == DialogResult.OK) //
             {
                 RefrescarTabla(); // Si importó con éxito, refresca la grilla principal automáticamente[cite: 4]
             }

@@ -2,12 +2,14 @@
 using System.Data;
 using System.Windows.Forms;
 using Microsoft.Data.SqlClient;
+using SistemaFerreteria.Model;
 
 namespace SistemaFerreteria
 {
     public partial class FormDashboard : Form
     {
-        private const string ConnectionString = "Server=.; Database=Ferreteria; Integrated Security=True; TrustServerCertificate=True;";
+        // 🌟 Reemplazamos la cadena directa por tu objeto de conexión centralizado
+        private readonly Conexion conexionBase = new Conexion();
 
         public FormDashboard()
         {
@@ -21,40 +23,32 @@ namespace SistemaFerreteria
 
         private void CargarMetricasDashboard()
         {
-            // Consultas SQL
-            string queryTotal = "SELECT COUNT(*) FROM Ventas";
-            string queryPendientes = "SELECT COUNT(*) FROM Ventas WHERE estado_venta = 'Pendiente'";
-            string queryEntregados = "SELECT COUNT(*) FROM Ventas WHERE estado_venta = 'Entregado'";
-            string queryCancelados = "SELECT COUNT(*) FROM Ventas WHERE estado_venta = 'Cancelado'";
+            // 🌟 CONSULTA OPTIMIZADA: Trae todos los contadores en una sola vuelta
+            string queryMétricas = @"
+                SELECT 
+                    COUNT(*) AS Total,
+                    SUM(CASE WHEN estado_venta = 'Pendiente' THEN 1 ELSE 0 END) AS Pendientes,
+                    SUM(CASE WHEN estado_venta = 'Entregado' THEN 1 ELSE 0 END) AS Entregados,
+                    SUM(CASE WHEN estado_venta = 'Cancelado' THEN 1 ELSE 0 END) AS Cancelados
+                FROM Ventas;";
 
-            using (SqlConnection conexion = new SqlConnection(ConnectionString))
+            // 🌟 Ajustado con conexionBase
+            using (SqlConnection conexion = conexionBase.ObtenerConexion())
+            using (SqlCommand cmd = new SqlCommand(queryMétricas, conexion))
             {
                 try
                 {
                     conexion.Open();
-
-                    // 1. Pedidos Totales
-                    using (SqlCommand cmd = new SqlCommand(queryTotal, conexion))
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        lblTotal.Text = cmd.ExecuteScalar().ToString();
-                    }
-
-                    // 2. Pendientes
-                    using (SqlCommand cmd = new SqlCommand(queryPendientes, conexion))
-                    {
-                        lblPendientes.Text = cmd.ExecuteScalar().ToString();
-                    }
-
-                    // 3. Entregados
-                    using (SqlCommand cmd = new SqlCommand(queryEntregados, conexion))
-                    {
-                        lblEntregados.Text = cmd.ExecuteScalar().ToString();
-                    }
-
-                    // 4. Cancelados
-                    using (SqlCommand cmd = new SqlCommand(queryCancelados, conexion))
-                    {
-                        lblCancelados.Text = cmd.ExecuteScalar().ToString();
+                        if (reader.Read())
+                        {
+                            // Asignamos los valores directamente desde las columnas de la única fila devuelta
+                            lblTotal.Text = reader["Total"].ToString();
+                            lblPendientes.Text = reader["Pendientes"].ToString();
+                            lblEntregados.Text = reader["Entregados"].ToString();
+                            lblCancelados.Text = reader["Cancelados"].ToString();
+                        }
                     }
                 }
                 catch (Exception ex)

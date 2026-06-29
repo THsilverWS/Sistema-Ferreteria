@@ -46,8 +46,8 @@ namespace SistemaFerreteria
 
         private void btnProductos_Click(object sender, EventArgs e)
         {
-            //AbrirFormEnPanel(new FormInventario());
-            AbrirFormEnPanel(new FormProductosAv());
+            AbrirFormEnPanel(new FormInventario());
+            //AbrirFormEnPanel(new FormProductosAv());
         }
 
         private void button7_Click(object sender, EventArgs e)

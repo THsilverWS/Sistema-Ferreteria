@@ -2,19 +2,22 @@
 using System;
 using System.Data;
 using System.Windows.Forms;
+using SistemaFerreteria.Model; // 🌟 Agregado para usar tu clase Conexion y UsuarioSesion
 
 namespace SistemaFerreteria
 {
     public partial class FormVentas : Form
     {
-        private string connectionString = "Server=.; Database=Ferreteria; Integrated Security=True; TrustServerCertificate=True;";
+        // 🌟 Reemplazamos la cadena directa por tu objeto de conexión centralizado
+        private readonly Conexion conexionBase = new Conexion();
         private string dniEmpleadoLogueado;
         private DataTable carrito;
 
         public FormVentas(string dniEmpleado)
         {
             InitializeComponent();
-            this.dniEmpleadoLogueado = dniEmpleado;
+            // 🌟 Si por alguna razón dniEmpleado viene vacío, aseguramos el tiro con la sesión global
+            this.dniEmpleadoLogueado = string.IsNullOrEmpty(dniEmpleado) ? UsuarioSesion.DniEmpleadoLogueado : dniEmpleado;
             ConfigurarCarrito();
         }
 
@@ -49,7 +52,8 @@ namespace SistemaFerreteria
 
             string query = "SELECT id_producto, nom_producto, pre_venta FROM Productos WHERE cod_barras = @cod";
 
-            using (SqlConnection conexion = new SqlConnection(connectionString))
+            // 🌟 Ajustado con conexionBase
+            using (SqlConnection conexion = conexionBase.ObtenerConexion())
             using (SqlCommand comando = new SqlCommand(query, conexion))
             {
                 comando.Parameters.Add("@cod", SqlDbType.VarChar, 50).Value = codigo;
@@ -115,17 +119,24 @@ namespace SistemaFerreteria
 
             string dni = txtDniCliente.Text.Trim();
             string nombre = txtNomCliente.Text.Trim();
-            string telefono = string.IsNullOrWhiteSpace(txtTelCliente.Text) ? "Sin Teléfono" : txtTelCliente.Text.Trim();
+            string telephone = string.IsNullOrWhiteSpace(txtTelCliente.Text) ? "Sin Teléfono" : txtTelCliente.Text.Trim();
             string direccion = string.IsNullOrWhiteSpace(txtDireccion.Text) ? "Dirección no especificada" : txtDireccion.Text.Trim();
 
             decimal totalVenta = 0;
             foreach (DataRow fila in carrito.Rows) totalVenta += Convert.ToDecimal(fila["Subtotal"]);
 
-            using (SqlConnection conexion = new SqlConnection(connectionString))
+            // 🌟 Ajustado con conexionBase
+            using (SqlConnection conexion = conexionBase.ObtenerConexion())
             {
                 try
                 {
                     conexion.Open();
+
+                    // =========================================================================
+                    // 🌟 AQUÍ FIRMAMOS LA CONEXIÓN PARA LOS TRIGGERS ANTES DE EMPEZAR LA TRANSACCIÓN
+                    // =========================================================================
+                    conexionBase.AsignarContextoSeguridad(conexion);
+
                     using (SqlTransaction transaccion = conexion.BeginTransaction())
                     {
                         string queryCheckCliente = "SELECT COUNT(1) FROM Clientes WHERE dni_ruc_cliente = @dni";
@@ -143,17 +154,15 @@ namespace SistemaFerreteria
                             {
                                 cmdInsCliente.Parameters.Add("@dni", SqlDbType.VarChar, 11).Value = dni;
                                 cmdInsCliente.Parameters.Add("@nom", SqlDbType.VarChar, 100).Value = nombre;
-                                cmdInsCliente.Parameters.Add("@tel", SqlDbType.VarChar, 15).Value = telefono;
+                                cmdInsCliente.Parameters.Add("@tel", SqlDbType.VarChar, 15).Value = telephone;
                                 cmdInsCliente.ExecuteNonQuery();
                             }
                         }
 
                         int idMetodoSeleccionado = Convert.ToInt32(cmbMetodoPago.SelectedValue);
                         string tipoVentaSeleccionado = cmbTipoVenta.SelectedItem.ToString();
-
                         string estadoInicial = (tipoVentaSeleccionado == "Factura") ? "Pendiente" : "Entregado";
 
-                        // 3. Insertar Cabecera de Venta Unificada con Nuevas Columnas
                         string queryVenta = @"INSERT INTO Ventas (fec_venta, dni_empleado, id_cliente, id_metodo, tot_venta, estado_venta, tipo_venta) 
                                               VALUES (GETDATE(), @dniVend, @idCli, @metodo, @tot, @estado, @tipo); 
                                               SELECT SCOPE_IDENTITY();";
@@ -174,7 +183,7 @@ namespace SistemaFerreteria
                         foreach (DataRow fila in carrito.Rows)
                         {
                             string queryDetalle = @"INSERT INTO DetalleVentas (id_venta, id_producto, cant_detalle, pre_compra_historico, pre_unitario_venta, dir_cliente_venta) 
-                           VALUES (@idVenta, @idProd, @cant, (SELECT COALESCE(pre_compra, 0.00) FROM Productos WHERE id_producto = @idProd), @precio, @dir);";
+                                                    VALUES (@idVenta, @idProd, @cant, (SELECT COALESCE(pre_compra, 0.00) FROM Productos WHERE id_producto = @idProd), @precio, @dir);";
 
                             using (SqlCommand cmdDetalle = new SqlCommand(queryDetalle, conexion, transaccion))
                             {
@@ -187,14 +196,15 @@ namespace SistemaFerreteria
                                 cmdDetalle.ExecuteNonQuery();
                             }
 
-                            string queryStock = "UPDATE Inventario SET stock_actual = stock_actual - @cant WHERE id_producto = @idProd AND id_almacen = 1 AND stock_actual >= @cant";
+                            // 🌟 CORREGIDO: Eliminado 'id_almacen = 1' ya que la tabla de Inventario ahora es global por producto
+                            string queryStock = "UPDATE Inventario SET stock_actual = stock_actual - @cant WHERE id_producto = @idProd AND stock_actual >= @cant";
                             using (SqlCommand cmdStock = new SqlCommand(queryStock, conexion, transaccion))
                             {
                                 cmdStock.Parameters.Add("@cant", SqlDbType.Int).Value = fila["Cantidad"];
                                 cmdStock.Parameters.Add("@idProd", SqlDbType.Int).Value = fila["id_producto"];
 
                                 if (cmdStock.ExecuteNonQuery() == 0)
-                                    throw new Exception($"Stock insuficiente en el Almacén Principal para el producto ID: {fila["id_producto"]}");
+                                    throw new Exception($"Stock insuficiente para el producto ID: {fila["id_producto"]}");
                             }
                         }
 
@@ -217,7 +227,9 @@ namespace SistemaFerreteria
         {
             string query = @"SELECT V.id_venta AS [Nro Boleta], V.fec_venta AS [Fecha/Hora], V.tipo_venta AS [Tipo], V.estado_venta AS [Estado], VD.nom_empleado AS [Empleado], C.nom_cliente AS [Cliente], V.tot_venta AS [Total Cobrado]
                              FROM Ventas V INNER JOIN Empleados VD ON V.dni_empleado = VD.dni_empleado INNER JOIN Clientes C ON V.id_cliente = C.dni_ruc_cliente";
-            using (SqlConnection conexion = new SqlConnection(connectionString))
+
+            // 🌟 Ajustado con conexionBase
+            using (SqlConnection conexion = conexionBase.ObtenerConexion())
             using (SqlDataAdapter adaptador = new SqlDataAdapter(query, conexion))
             {
                 DataTable tabla = new DataTable();
@@ -239,7 +251,8 @@ namespace SistemaFerreteria
         {
             string query = "SELECT id_metodo, nom_metodo FROM MetodosPago ORDER BY id_metodo";
 
-            using (SqlConnection conexion = new SqlConnection(connectionString))
+            // 🌟 Ajustado con conexionBase
+            using (SqlConnection conexion = conexionBase.ObtenerConexion())
             {
                 try
                 {

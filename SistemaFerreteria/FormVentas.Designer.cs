@@ -39,6 +39,10 @@
             btnFinalizarVenta = new Button();
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
+            label7 = new Label();
+            cmbTipoVenta = new ComboBox();
+            cmbMetodoPago = new ComboBox();
+            label6 = new Label();
             label5 = new Label();
             txtTelCliente = new TextBox();
             label4 = new Label();
@@ -48,10 +52,6 @@
             tabPage2 = new TabPage();
             btnRefrescar = new Button();
             dgvHistorial = new DataGridView();
-            label6 = new Label();
-            cmbMetodoPago = new ComboBox();
-            cmbTipoVenta = new ComboBox();
-            label7 = new Label();
             ((System.ComponentModel.ISupportInitialize)nmCantidad).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvCarrito).BeginInit();
             tabControl1.SuspendLayout();
@@ -63,6 +63,7 @@
             // txtDniCliente
             // 
             txtDniCliente.Location = new Point(109, 72);
+            txtDniCliente.MaxLength = 8;
             txtDniCliente.Name = "txtDniCliente";
             txtDniCliente.Size = new Size(100, 23);
             txtDniCliente.TabIndex = 0;
@@ -176,6 +177,42 @@
             tabPage1.Text = "tabPage1";
             tabPage1.UseVisualStyleBackColor = true;
             // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(185, 298);
+            label7.Name = "label7";
+            label7.Size = new Size(82, 15);
+            label7.TabIndex = 18;
+            label7.Text = "Tipo de Venta:";
+            // 
+            // cmbTipoVenta
+            // 
+            cmbTipoVenta.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbTipoVenta.FormattingEnabled = true;
+            cmbTipoVenta.Location = new Point(185, 325);
+            cmbTipoVenta.Name = "cmbTipoVenta";
+            cmbTipoVenta.Size = new Size(121, 23);
+            cmbTipoVenta.TabIndex = 17;
+            // 
+            // cmbMetodoPago
+            // 
+            cmbMetodoPago.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbMetodoPago.FormattingEnabled = true;
+            cmbMetodoPago.Location = new Point(16, 325);
+            cmbMetodoPago.Name = "cmbMetodoPago";
+            cmbMetodoPago.Size = new Size(121, 23);
+            cmbMetodoPago.TabIndex = 16;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(16, 298);
+            label6.Name = "label6";
+            label6.Size = new Size(98, 15);
+            label6.TabIndex = 15;
+            label6.Text = "Método de Pago:";
+            // 
             // label5
             // 
             label5.AutoSize = true;
@@ -256,42 +293,6 @@
             dgvHistorial.ReadOnly = true;
             dgvHistorial.Size = new Size(786, 291);
             dgvHistorial.TabIndex = 0;
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new Point(16, 298);
-            label6.Name = "label6";
-            label6.Size = new Size(98, 15);
-            label6.TabIndex = 15;
-            label6.Text = "Método de Pago:";
-            // 
-            // cmbMetodoPago
-            // 
-            cmbMetodoPago.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbMetodoPago.FormattingEnabled = true;
-            cmbMetodoPago.Location = new Point(16, 325);
-            cmbMetodoPago.Name = "cmbMetodoPago";
-            cmbMetodoPago.Size = new Size(121, 23);
-            cmbMetodoPago.TabIndex = 16;
-            // 
-            // cmbTipoVenta
-            // 
-            cmbTipoVenta.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbTipoVenta.FormattingEnabled = true;
-            cmbTipoVenta.Location = new Point(185, 325);
-            cmbTipoVenta.Name = "cmbTipoVenta";
-            cmbTipoVenta.Size = new Size(121, 23);
-            cmbTipoVenta.TabIndex = 17;
-            // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.Location = new Point(185, 298);
-            label7.Name = "label7";
-            label7.Size = new Size(82, 15);
-            label7.TabIndex = 18;
-            label7.Text = "Tipo de Venta:";
             // 
             // FormVentas
             // 

@@ -28,9 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Panel_Admin));
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             panel1 = new Panel();
+            button1 = new Button();
             button7 = new Button();
             button6 = new Button();
             btnProductos = new Button();
@@ -51,7 +52,6 @@
             pbFotoUsuario = new PictureBox();
             panelContenedor = new Panel();
             dgvPedidos = new DataGridView();
-            button1 = new Button();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
@@ -81,6 +81,24 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(277, 700);
             panel1.TabIndex = 0;
+            // 
+            // button1
+            // 
+            button1.Cursor = Cursors.Hand;
+            button1.Dock = DockStyle.Top;
+            button1.FlatAppearance.BorderSize = 0;
+            button1.FlatStyle = FlatStyle.Flat;
+            button1.ForeColor = Color.Black;
+            button1.Image = (Image)resources.GetObject("button1.Image");
+            button1.ImageAlign = ContentAlignment.MiddleLeft;
+            button1.Location = new Point(15, 325);
+            button1.Name = "button1";
+            button1.Size = new Size(262, 45);
+            button1.TabIndex = 10;
+            button1.Text = "  Avanzado";
+            button1.TextImageRelation = TextImageRelation.ImageBeforeText;
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // button7
             // 
@@ -258,6 +276,7 @@
             // 
             // pictureBox1
             // 
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
             pictureBox1.Location = new Point(12, 24);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(50, 50);
@@ -361,24 +380,6 @@
             dgvPedidos.Size = new Size(923, 644);
             dgvPedidos.TabIndex = 0;
             dgvPedidos.Visible = false;
-            // 
-            // button1
-            // 
-            button1.Cursor = Cursors.Hand;
-            button1.Dock = DockStyle.Top;
-            button1.FlatAppearance.BorderSize = 0;
-            button1.FlatStyle = FlatStyle.Flat;
-            button1.ForeColor = Color.Black;
-            button1.Image = (Image)resources.GetObject("button1.Image");
-            button1.ImageAlign = ContentAlignment.MiddleLeft;
-            button1.Location = new Point(15, 325);
-            button1.Name = "button1";
-            button1.Size = new Size(262, 45);
-            button1.TabIndex = 10;
-            button1.Text = "  Avanzado";
-            button1.TextImageRelation = TextImageRelation.ImageBeforeText;
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
             // 
             // Panel_Admin
             // 

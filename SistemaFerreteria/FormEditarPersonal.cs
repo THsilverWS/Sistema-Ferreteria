@@ -2,12 +2,14 @@
 using System;
 using System.Data;
 using System.Windows.Forms;
+using SistemaFerreteria.Model; // 🌟 Agregado para usar tu clase centralizada Conexion
 
 namespace SistemaFerreteria
 {
     public partial class FormEditarPersonal : Form
     {
-        private const string ConnectionString = "Server=.; Database=Ferreteria; Integrated Security=True; TrustServerCertificate=True;";
+        // 🌟 Reemplazamos la cadena directa por tu objeto de conexión centralizado
+        private readonly Conexion conexionBase = new Conexion();
         private string _dniEmpleado;
 
         public FormEditarPersonal(string dni)
@@ -25,13 +27,21 @@ namespace SistemaFerreteria
         }
 
         // =========================================================
-        // 1. CONFIGURAR LAS OPCIONES DEL COMBOBOX DE ROL
+        // 1. CONFIGURAR LAS OPCIONES DEL COMBOBOX DE ROL (Mapeado por ID)
         // =========================================================
         private void ConfigurarOpcionesRol()
         {
-            cmbRol.Items.Clear();
-            cmbRol.Items.Add("Vendedor");
-            cmbRol.Items.Add("Administrador");
+            // 🌟 CORREGIDO: Mapeamos los textos a los IDs reales de tu tabla Roles para no romper la BD
+            DataTable dtRoles = new DataTable();
+            dtRoles.Columns.Add("id_rol", typeof(int));
+            dtRoles.Columns.Add("nom_rol", typeof(string));
+
+            dtRoles.Rows.Add(1, "Administrador");
+            dtRoles.Rows.Add(2, "Vendedor");
+
+            cmbRol.DataSource = dtRoles;
+            cmbRol.DisplayMember = "nom_rol";
+            cmbRol.ValueMember = "id_rol";
             cmbRol.DropDownStyle = ComboBoxStyle.DropDownList;
         }
 
@@ -40,9 +50,10 @@ namespace SistemaFerreteria
         // =============================
         private void CargarDatosEmpleado()
         {
-            string query = "SELECT nom_empleado, usu_empleado, rol_empleado, est_empleado FROM Empleados WHERE dni_empleado = @dni";
+            // 🌟 ACTUALIZADO: Buscamos id_rol en lugar de rol_empleado
+            string query = "SELECT nom_empleado, usu_empleado, id_rol, est_empleado FROM Empleados WHERE dni_empleado = @dni";
 
-            using (SqlConnection conexion = new SqlConnection(ConnectionString))
+            using (SqlConnection conexion = conexionBase.ObtenerConexion())
             using (SqlCommand cmd = new SqlCommand(query, conexion))
             {
                 cmd.Parameters.Add("@dni", SqlDbType.VarChar, 8).Value = _dniEmpleado;
@@ -57,8 +68,8 @@ namespace SistemaFerreteria
                             txtNombre.Text = reader["nom_empleado"].ToString();
                             txtUsuario.Text = reader["usu_empleado"].ToString();
 
-                            string rol = reader["rol_empleado"].ToString().Trim();
-                            cmbRol.SelectedItem = rol;
+                            // 🌟 Selecciona el rol correspondiente mediante su ID numérico
+                            cmbRol.SelectedValue = Convert.ToInt32(reader["id_rol"]);
 
                             chkEstado.Checked = Convert.ToBoolean(reader["est_empleado"]);
                         }
@@ -81,31 +92,38 @@ namespace SistemaFerreteria
         // =========================
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtNombre.Text) || string.IsNullOrWhiteSpace(txtUsuario.Text) || cmbRol.SelectedItem == null)
+            if (string.IsNullOrWhiteSpace(txtNombre.Text) || string.IsNullOrWhiteSpace(txtUsuario.Text) || cmbRol.SelectedValue == null)
             {
                 MessageBox.Show("Por favor, rellene todos los campos obligatorios antes de guardar.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
+            // 🌟 ACTUALIZADO: Modificamos id_rol pasándole el entero seleccionado
             string query = @"UPDATE Empleados
                              SET nom_empleado = @nombre, 
                                  usu_empleado = @usuario, 
-                                 rol_empleado = @rol,
+                                 id_rol = @idRol,
                                  est_empleado = @estado 
                              WHERE dni_empleado = @dni";
 
-            using (SqlConnection conexion = new SqlConnection(ConnectionString))
+            using (SqlConnection conexion = conexionBase.ObtenerConexion())
             using (SqlCommand cmd = new SqlCommand(query, conexion))
             {
                 cmd.Parameters.Add("@nombre", SqlDbType.VarChar, 250).Value = txtNombre.Text.Trim();
                 cmd.Parameters.Add("@usuario", SqlDbType.VarChar, 50).Value = txtUsuario.Text.Trim();
-                cmd.Parameters.Add("@rol", SqlDbType.VarChar, 200).Value = cmbRol.SelectedItem.ToString();
+                cmd.Parameters.Add("@idRol", SqlDbType.Int).Value = Convert.ToInt32(cmbRol.SelectedValue);
                 cmd.Parameters.Add("@estado", SqlDbType.Bit).Value = chkEstado.Checked;
                 cmd.Parameters.Add("@dni", SqlDbType.VarChar, 8).Value = _dniEmpleado;
 
                 try
                 {
                     conexion.Open();
+
+                    // =========================================================================
+                    // 🌟 FIRMAMOS EL CONTEXTO ANTES DEL UPDATE PARA QUE TU TRIGGER REGISTRE QUIÉN EDITÓ
+                    // =========================================================================
+                    conexionBase.AsignarContextoSeguridad(conexion);
+
                     int filasAfectadas = cmd.ExecuteNonQuery();
 
                     if (filasAfectadas > 0)
