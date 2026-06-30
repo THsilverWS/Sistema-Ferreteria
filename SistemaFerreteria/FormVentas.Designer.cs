@@ -38,31 +38,41 @@
             lblTotal = new Label();
             btnFinalizarVenta = new Button();
             tabControl1 = new TabControl();
-            tabPage1 = new TabPage();
+            Ventas = new TabPage();
+            panel4 = new Panel();
+            panel3 = new Panel();
+            panel2 = new Panel();
+            label8 = new Label();
             label7 = new Label();
             cmbTipoVenta = new ComboBox();
-            cmbMetodoPago = new ComboBox();
-            label6 = new Label();
-            label5 = new Label();
-            txtTelCliente = new TextBox();
-            label4 = new Label();
-            txtDireccion = new TextBox();
-            txtNomCliente = new TextBox();
             label3 = new Label();
+            cmbMetodoPago = new ComboBox();
+            txtNomCliente = new TextBox();
+            label6 = new Label();
+            txtDireccion = new TextBox();
+            label5 = new Label();
+            label4 = new Label();
+            txtTelCliente = new TextBox();
+            panel1 = new Panel();
             tabPage2 = new TabPage();
-            btnRefrescar = new Button();
             dgvHistorial = new DataGridView();
+            panel5 = new Panel();
+            btnRefrescar = new Button();
             ((System.ComponentModel.ISupportInitialize)nmCantidad).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvCarrito).BeginInit();
             tabControl1.SuspendLayout();
-            tabPage1.SuspendLayout();
+            Ventas.SuspendLayout();
+            panel4.SuspendLayout();
+            panel3.SuspendLayout();
+            panel2.SuspendLayout();
             tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvHistorial).BeginInit();
+            panel5.SuspendLayout();
             SuspendLayout();
             // 
             // txtDniCliente
             // 
-            txtDniCliente.Location = new Point(109, 72);
+            txtDniCliente.Location = new Point(119, 124);
             txtDniCliente.MaxLength = 8;
             txtDniCliente.Name = "txtDniCliente";
             txtDniCliente.Size = new Size(100, 23);
@@ -70,15 +80,16 @@
             // 
             // txtCodBarras
             // 
-            txtCodBarras.Location = new Point(109, 115);
+            txtCodBarras.Location = new Point(119, 167);
             txtCodBarras.Name = "txtCodBarras";
             txtCodBarras.Size = new Size(100, 23);
             txtCodBarras.TabIndex = 1;
+            txtCodBarras.KeyDown += txtCodBarras_KeyDown;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(16, 72);
+            label1.Location = new Point(26, 124);
             label1.Name = "label1";
             label1.Size = new Size(55, 15);
             label1.TabIndex = 2;
@@ -87,7 +98,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(14, 118);
+            label2.Location = new Point(24, 170);
             label2.Name = "label2";
             label2.Size = new Size(97, 15);
             label2.TabIndex = 3;
@@ -95,14 +106,14 @@
             // 
             // nmCantidad
             // 
-            nmCantidad.Location = new Point(109, 252);
+            nmCantidad.Location = new Point(99, 314);
             nmCantidad.Name = "nmCantidad";
             nmCantidad.Size = new Size(120, 23);
             nmCantidad.TabIndex = 4;
             // 
             // btnAgregar
             // 
-            btnAgregar.Location = new Point(121, 380);
+            btnAgregar.Location = new Point(131, 432);
             btnAgregar.Name = "btnAgregar";
             btnAgregar.Size = new Size(75, 23);
             btnAgregar.TabIndex = 5;
@@ -112,16 +123,25 @@
             // 
             // dgvCarrito
             // 
+            dgvCarrito.AllowUserToAddRows = false;
+            dgvCarrito.AllowUserToDeleteRows = false;
+            dgvCarrito.AllowUserToResizeColumns = false;
+            dgvCarrito.AllowUserToResizeRows = false;
+            dgvCarrito.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvCarrito.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvCarrito.Location = new Point(413, 72);
+            dgvCarrito.Dock = DockStyle.Fill;
+            dgvCarrito.Location = new Point(366, 93);
             dgvCarrito.Name = "dgvCarrito";
-            dgvCarrito.Size = new Size(340, 232);
+            dgvCarrito.ReadOnly = true;
+            dgvCarrito.RowHeadersVisible = false;
+            dgvCarrito.Size = new Size(523, 332);
             dgvCarrito.TabIndex = 6;
             // 
             // lblTotal
             // 
+            lblTotal.Anchor = AnchorStyles.Top;
             lblTotal.AutoSize = true;
-            lblTotal.Location = new Point(538, 35);
+            lblTotal.Location = new Point(224, 38);
             lblTotal.Name = "lblTotal";
             lblTotal.Size = new Size(77, 15);
             lblTotal.TabIndex = 7;
@@ -129,7 +149,8 @@
             // 
             // btnFinalizarVenta
             // 
-            btnFinalizarVenta.Location = new Point(494, 359);
+            btnFinalizarVenta.Anchor = AnchorStyles.Bottom;
+            btnFinalizarVenta.Location = new Point(184, 37);
             btnFinalizarVenta.Name = "btnFinalizarVenta";
             btnFinalizarVenta.Size = new Size(154, 23);
             btnFinalizarVenta.TabIndex = 8;
@@ -139,48 +160,88 @@
             // 
             // tabControl1
             // 
-            tabControl1.Controls.Add(tabPage1);
+            tabControl1.Controls.Add(Ventas);
             tabControl1.Controls.Add(tabPage2);
             tabControl1.Dock = DockStyle.Fill;
             tabControl1.Location = new Point(0, 0);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(800, 450);
+            tabControl1.Size = new Size(919, 552);
             tabControl1.TabIndex = 9;
             // 
-            // tabPage1
+            // Ventas
             // 
-            tabPage1.Controls.Add(label7);
-            tabPage1.Controls.Add(cmbTipoVenta);
-            tabPage1.Controls.Add(cmbMetodoPago);
-            tabPage1.Controls.Add(label6);
-            tabPage1.Controls.Add(label5);
-            tabPage1.Controls.Add(txtTelCliente);
-            tabPage1.Controls.Add(label4);
-            tabPage1.Controls.Add(txtDireccion);
-            tabPage1.Controls.Add(txtNomCliente);
-            tabPage1.Controls.Add(label3);
-            tabPage1.Controls.Add(nmCantidad);
-            tabPage1.Controls.Add(lblTotal);
-            tabPage1.Controls.Add(btnFinalizarVenta);
-            tabPage1.Controls.Add(txtDniCliente);
-            tabPage1.Controls.Add(txtCodBarras);
-            tabPage1.Controls.Add(dgvCarrito);
-            tabPage1.Controls.Add(label1);
-            tabPage1.Controls.Add(btnAgregar);
-            tabPage1.Controls.Add(label2);
-            tabPage1.Location = new Point(4, 24);
-            tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(792, 422);
-            tabPage1.TabIndex = 0;
-            tabPage1.Text = "tabPage1";
-            tabPage1.UseVisualStyleBackColor = true;
+            Ventas.Controls.Add(dgvCarrito);
+            Ventas.Controls.Add(panel4);
+            Ventas.Controls.Add(panel3);
+            Ventas.Controls.Add(panel2);
+            Ventas.Controls.Add(panel1);
+            Ventas.Location = new Point(4, 24);
+            Ventas.Name = "Ventas";
+            Ventas.Padding = new Padding(3);
+            Ventas.Size = new Size(911, 524);
+            Ventas.TabIndex = 0;
+            Ventas.Text = "Ventas";
+            Ventas.UseVisualStyleBackColor = true;
+            // 
+            // panel4
+            // 
+            panel4.Controls.Add(btnFinalizarVenta);
+            panel4.Dock = DockStyle.Bottom;
+            panel4.Location = new Point(366, 425);
+            panel4.Name = "panel4";
+            panel4.Size = new Size(523, 96);
+            panel4.TabIndex = 22;
+            // 
+            // panel3
+            // 
+            panel3.Controls.Add(lblTotal);
+            panel3.Dock = DockStyle.Top;
+            panel3.Location = new Point(366, 3);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(523, 90);
+            panel3.TabIndex = 21;
+            // 
+            // panel2
+            // 
+            panel2.Controls.Add(label8);
+            panel2.Controls.Add(btnAgregar);
+            panel2.Controls.Add(label2);
+            panel2.Controls.Add(label1);
+            panel2.Controls.Add(txtCodBarras);
+            panel2.Controls.Add(txtDniCliente);
+            panel2.Controls.Add(label7);
+            panel2.Controls.Add(nmCantidad);
+            panel2.Controls.Add(cmbTipoVenta);
+            panel2.Controls.Add(label3);
+            panel2.Controls.Add(cmbMetodoPago);
+            panel2.Controls.Add(txtNomCliente);
+            panel2.Controls.Add(label6);
+            panel2.Controls.Add(txtDireccion);
+            panel2.Controls.Add(label5);
+            panel2.Controls.Add(label4);
+            panel2.Controls.Add(txtTelCliente);
+            panel2.Dock = DockStyle.Left;
+            panel2.Location = new Point(3, 3);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(363, 518);
+            panel2.TabIndex = 20;
+            // 
+            // label8
+            // 
+            label8.Anchor = AnchorStyles.Top;
+            label8.AutoSize = true;
+            label8.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label8.Location = new Point(87, 28);
+            label8.Name = "label8";
+            label8.Size = new Size(142, 25);
+            label8.TabIndex = 19;
+            label8.Text = "Registrar Venta";
             // 
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(185, 298);
+            label7.Location = new Point(195, 350);
             label7.Name = "label7";
             label7.Size = new Size(82, 15);
             label7.TabIndex = 18;
@@ -190,93 +251,126 @@
             // 
             cmbTipoVenta.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbTipoVenta.FormattingEnabled = true;
-            cmbTipoVenta.Location = new Point(185, 325);
+            cmbTipoVenta.Location = new Point(195, 377);
             cmbTipoVenta.Name = "cmbTipoVenta";
             cmbTipoVenta.Size = new Size(121, 23);
             cmbTipoVenta.TabIndex = 17;
             // 
-            // cmbMetodoPago
-            // 
-            cmbMetodoPago.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbMetodoPago.FormattingEnabled = true;
-            cmbMetodoPago.Location = new Point(16, 325);
-            cmbMetodoPago.Name = "cmbMetodoPago";
-            cmbMetodoPago.Size = new Size(121, 23);
-            cmbMetodoPago.TabIndex = 16;
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new Point(16, 298);
-            label6.Name = "label6";
-            label6.Size = new Size(98, 15);
-            label6.TabIndex = 15;
-            label6.Text = "Método de Pago:";
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Location = new Point(14, 215);
-            label5.Name = "label5";
-            label5.Size = new Size(53, 15);
-            label5.TabIndex = 14;
-            label5.Text = "Telefono";
-            // 
-            // txtTelCliente
-            // 
-            txtTelCliente.Location = new Point(109, 207);
-            txtTelCliente.Name = "txtTelCliente";
-            txtTelCliente.Size = new Size(100, 23);
-            txtTelCliente.TabIndex = 13;
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new Point(14, 164);
-            label4.Name = "label4";
-            label4.Size = new Size(57, 15);
-            label4.TabIndex = 12;
-            label4.Text = "Direccion";
-            // 
-            // txtDireccion
-            // 
-            txtDireccion.Location = new Point(109, 164);
-            txtDireccion.Name = "txtDireccion";
-            txtDireccion.Size = new Size(100, 23);
-            txtDireccion.TabIndex = 11;
-            // 
-            // txtNomCliente
-            // 
-            txtNomCliente.Location = new Point(109, 23);
-            txtNomCliente.Name = "txtNomCliente";
-            txtNomCliente.Size = new Size(100, 23);
-            txtNomCliente.TabIndex = 10;
-            // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(14, 23);
+            label3.Location = new Point(24, 75);
             label3.Name = "label3";
             label3.Size = new Size(51, 15);
             label3.TabIndex = 9;
             label3.Text = "Nombre";
             // 
+            // cmbMetodoPago
+            // 
+            cmbMetodoPago.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbMetodoPago.FormattingEnabled = true;
+            cmbMetodoPago.Location = new Point(26, 377);
+            cmbMetodoPago.Name = "cmbMetodoPago";
+            cmbMetodoPago.Size = new Size(121, 23);
+            cmbMetodoPago.TabIndex = 16;
+            // 
+            // txtNomCliente
+            // 
+            txtNomCliente.Location = new Point(119, 75);
+            txtNomCliente.Name = "txtNomCliente";
+            txtNomCliente.Size = new Size(100, 23);
+            txtNomCliente.TabIndex = 10;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(26, 350);
+            label6.Name = "label6";
+            label6.Size = new Size(98, 15);
+            label6.TabIndex = 15;
+            label6.Text = "Método de Pago:";
+            // 
+            // txtDireccion
+            // 
+            txtDireccion.Location = new Point(119, 216);
+            txtDireccion.Name = "txtDireccion";
+            txtDireccion.Size = new Size(100, 23);
+            txtDireccion.TabIndex = 11;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(24, 267);
+            label5.Name = "label5";
+            label5.Size = new Size(53, 15);
+            label5.TabIndex = 14;
+            label5.Text = "Telefono";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(24, 216);
+            label4.Name = "label4";
+            label4.Size = new Size(57, 15);
+            label4.TabIndex = 12;
+            label4.Text = "Direccion";
+            // 
+            // txtTelCliente
+            // 
+            txtTelCliente.Location = new Point(119, 259);
+            txtTelCliente.MaxLength = 9;
+            txtTelCliente.Name = "txtTelCliente";
+            txtTelCliente.Size = new Size(100, 23);
+            txtTelCliente.TabIndex = 13;
+            // 
+            // panel1
+            // 
+            panel1.Dock = DockStyle.Right;
+            panel1.Location = new Point(889, 3);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(19, 518);
+            panel1.TabIndex = 19;
+            // 
             // tabPage2
             // 
-            tabPage2.Controls.Add(btnRefrescar);
             tabPage2.Controls.Add(dgvHistorial);
+            tabPage2.Controls.Add(panel5);
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(792, 422);
+            tabPage2.Size = new Size(911, 524);
             tabPage2.TabIndex = 1;
-            tabPage2.Text = "tabPage2";
+            tabPage2.Text = "Registro";
             tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // dgvHistorial
+            // 
+            dgvHistorial.AllowUserToAddRows = false;
+            dgvHistorial.AllowUserToDeleteRows = false;
+            dgvHistorial.AllowUserToResizeColumns = false;
+            dgvHistorial.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvHistorial.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvHistorial.Dock = DockStyle.Fill;
+            dgvHistorial.Location = new Point(3, 71);
+            dgvHistorial.Name = "dgvHistorial";
+            dgvHistorial.ReadOnly = true;
+            dgvHistorial.RowHeadersVisible = false;
+            dgvHistorial.Size = new Size(905, 450);
+            dgvHistorial.TabIndex = 0;
+            // 
+            // panel5
+            // 
+            panel5.Controls.Add(btnRefrescar);
+            panel5.Dock = DockStyle.Top;
+            panel5.Location = new Point(3, 3);
+            panel5.Name = "panel5";
+            panel5.Size = new Size(905, 68);
+            panel5.TabIndex = 2;
             // 
             // btnRefrescar
             // 
             btnRefrescar.Anchor = AnchorStyles.Top;
-            btnRefrescar.Location = new Point(269, 51);
+            btnRefrescar.Location = new Point(329, 26);
             btnRefrescar.Name = "btnRefrescar";
             btnRefrescar.Size = new Size(207, 23);
             btnRefrescar.TabIndex = 1;
@@ -284,21 +378,11 @@
             btnRefrescar.UseVisualStyleBackColor = true;
             btnRefrescar.Click += btnRefrescar_Click_1;
             // 
-            // dgvHistorial
-            // 
-            dgvHistorial.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvHistorial.Dock = DockStyle.Bottom;
-            dgvHistorial.Location = new Point(3, 128);
-            dgvHistorial.Name = "dgvHistorial";
-            dgvHistorial.ReadOnly = true;
-            dgvHistorial.Size = new Size(786, 291);
-            dgvHistorial.TabIndex = 0;
-            // 
             // FormVentas
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(919, 552);
             Controls.Add(tabControl1);
             Name = "FormVentas";
             Text = "FormVentas";
@@ -306,10 +390,15 @@
             ((System.ComponentModel.ISupportInitialize)nmCantidad).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvCarrito).EndInit();
             tabControl1.ResumeLayout(false);
-            tabPage1.ResumeLayout(false);
-            tabPage1.PerformLayout();
+            Ventas.ResumeLayout(false);
+            panel4.ResumeLayout(false);
+            panel3.ResumeLayout(false);
+            panel3.PerformLayout();
+            panel2.ResumeLayout(false);
+            panel2.PerformLayout();
             tabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvHistorial).EndInit();
+            panel5.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -325,7 +414,7 @@
         private Label lblTotal;
         private Button btnFinalizarVenta;
         private TabControl tabControl1;
-        private TabPage tabPage1;
+        private TabPage Ventas;
         private TabPage tabPage2;
         private Button btnRefrescar;
         private DataGridView dgvHistorial;
@@ -339,5 +428,11 @@
         private Label label6;
         private Label label7;
         private ComboBox cmbTipoVenta;
+        private Panel panel1;
+        private Panel panel4;
+        private Panel panel3;
+        private Panel panel2;
+        private Label label8;
+        private Panel panel5;
     }
 }

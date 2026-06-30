@@ -57,7 +57,7 @@ namespace SistemaFerreteria
 
         private void button6_Click(object sender, EventArgs e)
         {
-
+            Application.Exit();
         }
 
         private void button1_Click(object sender, EventArgs e)

@@ -16,21 +16,19 @@ namespace SistemaFerreteria.Model
         {
             DataTable resultado = new DataTable();
 
-            // Consulta adaptada a los roles dinámicos (RF01 y RF02)
-            string query = @"SELECT E.dni_empleado, R.nom_rol 
-                             FROM Empleados E
-                             INNER JOIN Roles R ON E.id_rol = R.id_rol
-                             WHERE E.usu_empleado = @user 
-                               AND E.con_empleado = @pass 
-                               AND E.est_empleado = 1";
+            // 🌟 CORREGIDO: Traemos también est_empleado y quitamos el filtro fijo del WHERE
+            string query = @"SELECT E.dni_empleado, R.nom_rol, E.est_empleado 
+                     FROM Empleados E
+                     INNER JOIN Roles R ON E.id_rol = R.id_rol
+                     WHERE E.usu_empleado = @user 
+                       AND E.con_empleado = @pass";
 
-            // try-with-resources (using) asegura el cierre inmediato de la conexión (Exigido en la rúbrica)
             using (SqlConnection con = conexionBase.ObtenerConexion())
             {
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
                     cmd.Parameters.Add("@user", SqlDbType.VarChar, 50).Value = usuario;
-                    cmd.Parameters.Add("@pass", SqlDbType.VarChar, 255).Value = contrasena; // Ampliado para soportar hash cifrado
+                    cmd.Parameters.Add("@pass", SqlDbType.VarChar, 255).Value = contrasena;
 
                     try
                     {
@@ -42,7 +40,6 @@ namespace SistemaFerreteria.Model
                     }
                     catch (SqlException ex)
                     {
-                        // Manejo controlado de excepciones sin romper la app (RNF04)
                         throw new Exception("Error en la base de datos al validar credenciales: " + ex.Message);
                     }
                 }
@@ -159,11 +156,11 @@ namespace SistemaFerreteria.Model
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
                     cmd.Parameters.AddWithValue("@dni", dni);
-            cmd.Parameters.AddWithValue("@nombre", nombre);
+                    cmd.Parameters.AddWithValue("@nombre", nombre);
                     cmd.Parameters.AddWithValue("@idRol", idRol);
                     cmd.Parameters.AddWithValue("@estado", estado ? 1 : 0);
 
-            try
+                    try
                     {
                         con.Open();
 

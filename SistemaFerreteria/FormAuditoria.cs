@@ -24,7 +24,6 @@ namespace SistemaFerreteria
 
             // Bloqueamos los campos superiores informativos de tu diseño
             txtCargo.ReadOnly = true;
-            txtHora.ReadOnly = true; // Si decides mantenerlos separados
             txtNombreEquip.ReadOnly = true;
             txtId.ReadOnly = true;
             txtTablaAfectada.ReadOnly = true;
@@ -95,7 +94,6 @@ namespace SistemaFerreteria
             txtTablaAfectada.Clear();
             txtFecha.Clear();
             txtCargo.Clear();
-            txtHora.Clear();
             txtNombreEquip.Clear();
             txtId.Clear();
             txtValoresAnteriores.Clear();

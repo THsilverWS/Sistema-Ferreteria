@@ -1,7 +1,8 @@
-﻿using System;
+﻿using SistemaFerreteria.Model;
+using System;
 using System.Data;
 using System.Windows.Forms;
-using SistemaFerreteria.Model;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SistemaFerreteria
 {
@@ -19,7 +20,6 @@ namespace SistemaFerreteria
             string usuario = txtUsuario.Text.Trim();
             string contrasena = txtContrasena.Text.Trim();
 
-            // Validación de entradas en interfaz
             if (string.IsNullOrEmpty(usuario) || string.IsNullOrEmpty(contrasena))
             {
                 MessageBox.Show("Por favor, llena todos los campos.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -28,27 +28,33 @@ namespace SistemaFerreteria
 
             try
             {
-                // Invocamos la lógica de negocio a través del DAO 
                 DataTable dtUsuario = empleadoDao.ValidarLogin(usuario, contrasena);
 
                 if (dtUsuario.Rows.Count > 0)
                 {
-                    // Extraemos los datos de la fila encontrada
+                    // 🌟 1. VALIDACIÓN INMEDIATA DE ESTADO DE EMPLEADO
+                    bool estaActivo = Convert.ToBoolean(dtUsuario.Rows[0]["est_empleado"]);
+
+                    if (!estaActivo)
+                    {
+                        MessageBox.Show("Tu cuenta de empleado se encuentra desactivada. Comunícate con el Administrador.",
+                            "Acceso Denegado",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Stop); // Icono de parada obligatoria
+                        return; // Frenamos el login en seco aquí
+                    }
+
+                    // Si pasa la validación, continúa tu flujo normal sin cambios
                     string dniEmpleado = dtUsuario.Rows[0]["dni_empleado"].ToString();
                     string rolUsuario = dtUsuario.Rows[0]["nom_rol"].ToString().Trim();
 
-                    // 🌟 CORREGIDO: Ahora usamos la variable que ya creaste arriba
                     UsuarioSesion.DniEmpleadoLogueado = dniEmpleado;
 
-                    MessageBox.Show($"¡Bienvenido! Rol: {rolUsuario}",
-                        "Acceso Concedido",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
+                    MessageBox.Show($"¡Bienvenido! Rol: {rolUsuario}", "Acceso Concedido", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     txtUsuario.Clear();
                     txtContrasena.Clear();
 
-                    // Direccionamiento según el nivel de acceso
                     if (rolUsuario == "Administrador")
                     {
                         Panel_Admin panel = new Panel_Admin();
@@ -57,34 +63,43 @@ namespace SistemaFerreteria
                     }
                     else
                     {
-                        // 1. Guardamos el DNI en la sesión global para que esté disponible en todos lados[cite: 1, 2]
                         UsuarioSesion.DniEmpleadoLogueado = dniEmpleado;
 
-                        // 2. Instanciamos el Menú Principal (Form1)[cite: 1]
                         Form1 formularioPrincipal = new Form1(rolUsuario, dniEmpleado);
-                        formularioPrincipal.FormClosed += (s, args) => this.Close(); // Si se cierra Form1, muere la app
+                        formularioPrincipal.FormClosed += (s, args) => this.Close();
                         formularioPrincipal.Show();
 
-                        // 3. 🌟 INSTANCIAMOS Y ABRIMOS TAMBIÉN EL FORM DE VENTAS DE GOLPE
                         FormVentas formularioVentas = new FormVentas(dniEmpleado);
-                        formularioVentas.Show(); // Usamos .Show() para que ambas ventanas queden flotando activas en pantalla
+                        formularioVentas.Show();
 
-                        this.Hide(); // Ocultamos el login
+                        this.Hide();
                     }
-
                     this.Hide();
                 }
                 else
                 {
-                    MessageBox.Show("Usuario o contraseña incorrectos (o empleado inactivo).",
-                        "Error",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
+                    // 🌟 Mensaje corregido y limpio
+                    MessageBox.Show("Usuario o contraseña incorrectos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
             {
-                // Manejo de errores visuales controlados
+
+
+                // 🌟 JALAMOS LAS VARIABLES ACTUALES DE SETTINGS PARA VISUALIZARLAS
+                string servidorActual = Properties.Settings.Default.ServidorSQL;
+                string baseDatosActual = Properties.Settings.Default.BaseDatosSQL;
+
+                // Armamos un mensaje senior detallado
+                string mensajeError = $"Error de Sistema al conectar.\n\n" +
+                                      $"=== PARÁMETROS ACTUALES ===\n" +
+                                      $"• Servidor: \"{servidorActual}\"\n" +
+                                      $"• Base de Datos: \"{baseDatosActual}\"\n\n" +
+                                      $"=== DETALLE TÉCNICO ===\n" +
+                                      $"{ex.Message}";
+
+                MessageBox.Show(mensajeError, "Error de Conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                 MessageBox.Show(ex.Message, "Error de Sistema", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -92,6 +107,10 @@ namespace SistemaFerreteria
         private void LoginForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             Application.Exit();
+        }
+
+        private void LoginForm_Load(object sender, EventArgs e)
+        {
         }
     }
 }

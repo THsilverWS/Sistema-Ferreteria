@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SistemaFerreteria {
+namespace SistemaFerreteria.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

@@ -79,6 +79,13 @@ namespace SistemaFerreteria
             frm.MdiParent = this;
             frm.Show();
         }
+
+        private void baseDeDatosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormConfBase frm = new FormConfBase();
+            frm.MdiParent = this;
+            frm.Show();
+        }
     }
 
 }

@@ -13,8 +13,8 @@ namespace SistemaFerreteria
         private string ObtenerCadenaConexion()
         {
             // Corregido: Acceso directo a Settings en la raíz del proyecto
-            string servidor = Settings.Default.ServidorSQL;
-            string baseDatos = Settings.Default.BaseDatosSQL;
+            string servidor = Properties.Settings.Default.ServidorSQL;
+            string baseDatos = Properties.Settings.Default.BaseDatosSQL;
 
             // Armamos el String de Conexión con autenticación de Windows
             return $"Server={servidor};Database={baseDatos};Trusted_Connection=True;Encrypt=False;";

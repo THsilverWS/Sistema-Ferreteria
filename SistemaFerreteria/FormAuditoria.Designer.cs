@@ -30,6 +30,10 @@
         {
             panel1 = new Panel();
             panel2 = new Panel();
+            label8 = new Label();
+            label6 = new Label();
+            txtValoresNuevos = new TextBox();
+            txtValoresAnteriores = new TextBox();
             button4 = new Button();
             button3 = new Button();
             button2 = new Button();
@@ -37,9 +41,7 @@
             label7 = new Label();
             txtId = new TextBox();
             txtFecha = new TextBox();
-            label6 = new Label();
             label5 = new Label();
-            txtHora = new TextBox();
             txtNombreEquip = new TextBox();
             txtTablaAfectada = new TextBox();
             label4 = new Label();
@@ -51,8 +53,6 @@
             panel3 = new Panel();
             panel4 = new Panel();
             dgvAuditoria = new DataGridView();
-            txtValoresAnteriores = new TextBox();
-            txtValoresNuevos = new TextBox();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvAuditoria).BeginInit();
             SuspendLayout();
@@ -67,6 +67,8 @@
             // 
             // panel2
             // 
+            panel2.Controls.Add(label8);
+            panel2.Controls.Add(label6);
             panel2.Controls.Add(txtValoresNuevos);
             panel2.Controls.Add(txtValoresAnteriores);
             panel2.Controls.Add(button4);
@@ -76,9 +78,7 @@
             panel2.Controls.Add(label7);
             panel2.Controls.Add(txtId);
             panel2.Controls.Add(txtFecha);
-            panel2.Controls.Add(label6);
             panel2.Controls.Add(label5);
-            panel2.Controls.Add(txtHora);
             panel2.Controls.Add(txtNombreEquip);
             panel2.Controls.Add(txtTablaAfectada);
             panel2.Controls.Add(label4);
@@ -92,6 +92,40 @@
             panel2.Name = "panel2";
             panel2.Size = new Size(960, 187);
             panel2.TabIndex = 1;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(173, 96);
+            label8.Name = "label8";
+            label8.Size = new Size(101, 15);
+            label8.TabIndex = 21;
+            label8.Text = "Valores Anteriores";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(643, 96);
+            label6.Name = "label6";
+            label6.Size = new Size(87, 15);
+            label6.TabIndex = 20;
+            label6.Text = "Valores Nuevos";
+            // 
+            // txtValoresNuevos
+            // 
+            txtValoresNuevos.Location = new Point(556, 114);
+            txtValoresNuevos.Name = "txtValoresNuevos";
+            txtValoresNuevos.ReadOnly = true;
+            txtValoresNuevos.Size = new Size(334, 23);
+            txtValoresNuevos.TabIndex = 19;
+            // 
+            // txtValoresAnteriores
+            // 
+            txtValoresAnteriores.Location = new Point(81, 114);
+            txtValoresAnteriores.Name = "txtValoresAnteriores";
+            txtValoresAnteriores.ReadOnly = true;
+            txtValoresAnteriores.Size = new Size(268, 23);
+            txtValoresAnteriores.TabIndex = 18;
             // 
             // button4
             // 
@@ -134,7 +168,7 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(784, 46);
+            label7.Location = new Point(705, 63);
             label7.Name = "label7";
             label7.Size = new Size(20, 15);
             label7.TabIndex = 13;
@@ -142,53 +176,37 @@
             // 
             // txtId
             // 
-            txtId.Location = new Point(810, 43);
+            txtId.Location = new Point(731, 60);
             txtId.Name = "txtId";
             txtId.Size = new Size(71, 23);
             txtId.TabIndex = 12;
             // 
             // txtFecha
             // 
-            txtFecha.Location = new Point(664, 26);
+            txtFecha.Location = new Point(731, 31);
             txtFecha.Name = "txtFecha";
-            txtFecha.Size = new Size(89, 23);
+            txtFecha.Size = new Size(159, 23);
             txtFecha.TabIndex = 11;
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new Point(622, 57);
-            label6.Name = "label6";
-            label6.Size = new Size(36, 15);
-            label6.TabIndex = 10;
-            label6.Text = "Hora:";
             // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(622, 26);
+            label5.Location = new Point(689, 31);
             label5.Name = "label5";
             label5.Size = new Size(41, 15);
             label5.TabIndex = 9;
             label5.Text = "Fecha:";
             // 
-            // txtHora
-            // 
-            txtHora.Location = new Point(664, 54);
-            txtHora.Name = "txtHora";
-            txtHora.Size = new Size(89, 23);
-            txtHora.TabIndex = 8;
-            // 
             // txtNombreEquip
             // 
-            txtNombreEquip.Location = new Point(393, 51);
+            txtNombreEquip.Location = new Point(460, 56);
             txtNombreEquip.Name = "txtNombreEquip";
             txtNombreEquip.Size = new Size(201, 23);
             txtNombreEquip.TabIndex = 7;
             // 
             // txtTablaAfectada
             // 
-            txtTablaAfectada.Location = new Point(393, 18);
+            txtTablaAfectada.Location = new Point(460, 23);
             txtTablaAfectada.Name = "txtTablaAfectada";
             txtTablaAfectada.ReadOnly = true;
             txtTablaAfectada.Size = new Size(201, 23);
@@ -197,7 +215,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(301, 51);
+            label4.Location = new Point(368, 56);
             label4.Name = "label4";
             label4.Size = new Size(93, 15);
             label4.TabIndex = 5;
@@ -206,7 +224,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(301, 21);
+            label3.Location = new Point(368, 26);
             label3.Name = "label3";
             label3.Size = new Size(86, 15);
             label3.TabIndex = 4;
@@ -215,7 +233,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(12, 54);
+            label2.Location = new Point(79, 59);
             label2.Name = "label2";
             label2.Size = new Size(42, 15);
             label2.TabIndex = 3;
@@ -224,7 +242,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(12, 21);
+            label1.Location = new Point(79, 26);
             label1.Name = "label1";
             label1.Size = new Size(63, 15);
             label1.TabIndex = 2;
@@ -232,7 +250,7 @@
             // 
             // txtCargo
             // 
-            txtCargo.Location = new Point(81, 51);
+            txtCargo.Location = new Point(148, 56);
             txtCargo.Name = "txtCargo";
             txtCargo.ReadOnly = true;
             txtCargo.Size = new Size(201, 23);
@@ -241,7 +259,7 @@
             // cboEmpleado
             // 
             cboEmpleado.FormattingEnabled = true;
-            cboEmpleado.Location = new Point(81, 18);
+            cboEmpleado.Location = new Point(148, 23);
             cboEmpleado.Name = "cboEmpleado";
             cboEmpleado.Size = new Size(201, 23);
             cboEmpleado.TabIndex = 0;
@@ -276,20 +294,6 @@
             dgvAuditoria.Size = new Size(940, 332);
             dgvAuditoria.TabIndex = 3;
             dgvAuditoria.CellClick += dgvAuditoria_CellClick;
-            // 
-            // txtValoresAnteriores
-            // 
-            txtValoresAnteriores.Location = new Point(81, 114);
-            txtValoresAnteriores.Name = "txtValoresAnteriores";
-            txtValoresAnteriores.Size = new Size(201, 23);
-            txtValoresAnteriores.TabIndex = 18;
-            // 
-            // txtValoresNuevos
-            // 
-            txtValoresNuevos.Location = new Point(552, 114);
-            txtValoresNuevos.Name = "txtValoresNuevos";
-            txtValoresNuevos.Size = new Size(201, 23);
-            txtValoresNuevos.TabIndex = 19;
             // 
             // FormAuditoria
             // 
@@ -328,14 +332,14 @@
         private Label label7;
         private TextBox txtId;
         private TextBox txtFecha;
-        private Label label6;
         private Label label5;
-        private TextBox txtHora;
         private Button button4;
         private Button button3;
         private Button button2;
         private Button button1;
-        private TextBox txtValoresNuevos;
         private TextBox txtValoresAnteriores;
+        private Label label8;
+        private Label label6;
+        private TextBox txtValoresNuevos;
     }
 }

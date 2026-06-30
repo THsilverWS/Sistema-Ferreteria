@@ -260,6 +260,7 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "LoginForm";
             FormClosed += LoginForm_FormClosed;
+            Load += LoginForm_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             panel5.ResumeLayout(false);

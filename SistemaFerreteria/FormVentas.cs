@@ -276,5 +276,23 @@ namespace SistemaFerreteria
                 }
             }
         }
+
+        private void txtCodBarras_KeyDown(object sender, KeyEventArgs e)
+        {
+            // 🌟 Barcode to PC enviará la tecla Enter al finalizar la escritura del código
+            if (e.KeyCode == Keys.Enter)
+            {
+                // Detiene el sonido "beep" por defecto de Windows al pulsar Enter
+                e.SuppressKeyPress = true;
+
+                string codigoEscaneado = txtCodBarras.Text.Trim();
+
+                // Si el celular leyó con éxito, ejecutamos tu lógica de búsqueda e inserción
+                if (!string.IsNullOrEmpty(codigoEscaneado))
+                {
+                    ProcesarCodigo(codigoEscaneado);
+        }
+            }
+        }
     }
 }
