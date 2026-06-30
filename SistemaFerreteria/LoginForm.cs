@@ -32,7 +32,6 @@ namespace SistemaFerreteria
 
                 if (dtUsuario.Rows.Count > 0)
                 {
-                    // 🌟 1. VALIDACIÓN INMEDIATA DE ESTADO DE EMPLEADO
                     bool estaActivo = Convert.ToBoolean(dtUsuario.Rows[0]["est_empleado"]);
 
                     if (!estaActivo)
@@ -40,11 +39,10 @@ namespace SistemaFerreteria
                         MessageBox.Show("Tu cuenta de empleado se encuentra desactivada. Comunícate con el Administrador.",
                             "Acceso Denegado",
                             MessageBoxButtons.OK,
-                            MessageBoxIcon.Stop); // Icono de parada obligatoria
-                        return; // Frenamos el login en seco aquí
+                            MessageBoxIcon.Stop); 
+                        return; 
                     }
 
-                    // Si pasa la validación, continúa tu flujo normal sin cambios
                     string dniEmpleado = dtUsuario.Rows[0]["dni_empleado"].ToString();
                     string rolUsuario = dtUsuario.Rows[0]["nom_rol"].ToString().Trim();
 
@@ -78,7 +76,6 @@ namespace SistemaFerreteria
                 }
                 else
                 {
-                    // 🌟 Mensaje corregido y limpio
                     MessageBox.Show("Usuario o contraseña incorrectos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -86,11 +83,9 @@ namespace SistemaFerreteria
             {
 
 
-                // 🌟 JALAMOS LAS VARIABLES ACTUALES DE SETTINGS PARA VISUALIZARLAS
                 string servidorActual = Properties.Settings.Default.ServidorSQL;
                 string baseDatosActual = Properties.Settings.Default.BaseDatosSQL;
 
-                // Armamos un mensaje senior detallado
                 string mensajeError = $"Error de Sistema al conectar.\n\n" +
                                       $"=== PARÁMETROS ACTUALES ===\n" +
                                       $"• Servidor: \"{servidorActual}\"\n" +
@@ -114,3 +109,4 @@ namespace SistemaFerreteria
         }
     }
 }
+

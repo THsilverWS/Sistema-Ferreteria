@@ -24,29 +24,24 @@ namespace SistemaFerreteria
                 return;
             }
 
-            // Guardamos temporalmente los valores actuales por si la prueba falla y queremos revertir
             string servidorAnterior = Properties.Settings.Default.ServidorSQL; 
             string baseDatosAnterior = Properties.Settings.Default.BaseDatosSQL;
 
             try
             {
-                // Asignamos provisionalmente los nuevos textos a tus variables de Settings
                 Properties.Settings.Default.ServidorSQL = txtServidor.Text.Trim();
                 Properties.Settings.Default.BaseDatosSQL = txtBaseDatos.Text.Trim();
 
-                // 🌟 ATENCIÓN SENIOR: Probamos si la nueva configuración conecta con éxito[cite: 16]
                 if (conexionBase.ProbarConexion())
                 {
-                    // Si conecta, asentamos los cambios definitivamente en el archivo local de configuración
                     Properties.Settings.Default.Save();
 
                     MessageBox.Show("¡Conexión establecida con éxito! Los parámetros han sido actualizados.",
                                     "Configuración Guardada", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    this.Close(); // Cerramos la ventana de ajuste
+                    this.Close();
                 }
                 else
                 {
-                    // Si la prueba falla, regresamos los valores a como estaban antes para no romper el sistema
                     Properties.Settings.Default.ServidorSQL = servidorAnterior;
                     Properties.Settings.Default.BaseDatosSQL = baseDatosAnterior;
 
@@ -57,7 +52,6 @@ namespace SistemaFerreteria
             }
             catch (Exception ex)
             {
-                // Revertimos ante cualquier error inesperado del sistema
                 Properties.Settings.Default.ServidorSQL = servidorAnterior;
                 Properties.Settings.Default.BaseDatosSQL = baseDatosAnterior;
 

@@ -8,7 +8,6 @@ namespace SistemaFerreteria
 {
     public partial class FormDashboard : Form
     {
-        // 🌟 Reemplazamos la cadena directa por tu objeto de conexión centralizado
         private readonly Conexion conexionBase = new Conexion();
 
         public FormDashboard()
@@ -23,7 +22,6 @@ namespace SistemaFerreteria
 
         private void CargarMetricasDashboard()
         {
-            // 🌟 CONSULTA OPTIMIZADA: Trae todos los contadores en una sola vuelta
             string queryMétricas = @"
                 SELECT 
                     COUNT(*) AS Total,
@@ -32,7 +30,6 @@ namespace SistemaFerreteria
                     SUM(CASE WHEN estado_venta = 'Cancelado' THEN 1 ELSE 0 END) AS Cancelados
                 FROM Ventas;";
 
-            // 🌟 Ajustado con conexionBase
             using (SqlConnection conexion = conexionBase.ObtenerConexion())
             using (SqlCommand cmd = new SqlCommand(queryMétricas, conexion))
             {
@@ -43,7 +40,6 @@ namespace SistemaFerreteria
                     {
                         if (reader.Read())
                         {
-                            // Asignamos los valores directamente desde las columnas de la única fila devuelta
                             lblTotal.Text = reader["Total"].ToString();
                             lblPendientes.Text = reader["Pendientes"].ToString();
                             lblEntregados.Text = reader["Entregados"].ToString();

@@ -33,16 +33,19 @@
             productosToolStripMenuItem = new ToolStripMenuItem();
             proveedoresToolStripMenuItem = new ToolStripMenuItem();
             registroToolStripMenuItem = new ToolStripMenuItem();
+            historialDeInventarioToolStripMenuItem = new ToolStripMenuItem();
             procesosToolStripMenuItem = new ToolStripMenuItem();
             inventarioToolStripMenuItem = new ToolStripMenuItem();
             categoriasToolStripMenuItem = new ToolStripMenuItem();
             metodosDePagoToolStripMenuItem = new ToolStripMenuItem();
             estantesToolStripMenuItem = new ToolStripMenuItem();
+            solicitarProductosToolStripMenuItem = new ToolStripMenuItem();
             personalToolStripMenuItem = new ToolStripMenuItem();
             empleadosToolStripMenuItem = new ToolStripMenuItem();
             cargosToolStripMenuItem = new ToolStripMenuItem();
             configuracionToolStripMenuItem = new ToolStripMenuItem();
             baseDeDatosToolStripMenuItem = new ToolStripMenuItem();
+            almacenesToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -57,7 +60,7 @@
             // 
             // mantenimientoToolStripMenuItem
             // 
-            mantenimientoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { productosToolStripMenuItem, proveedoresToolStripMenuItem, registroToolStripMenuItem });
+            mantenimientoToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { productosToolStripMenuItem, proveedoresToolStripMenuItem, registroToolStripMenuItem, historialDeInventarioToolStripMenuItem, almacenesToolStripMenuItem });
             mantenimientoToolStripMenuItem.Name = "mantenimientoToolStripMenuItem";
             mantenimientoToolStripMenuItem.Size = new Size(101, 20);
             mantenimientoToolStripMenuItem.Text = "Mantenimiento";
@@ -65,26 +68,33 @@
             // productosToolStripMenuItem
             // 
             productosToolStripMenuItem.Name = "productosToolStripMenuItem";
-            productosToolStripMenuItem.Size = new Size(139, 22);
+            productosToolStripMenuItem.Size = new Size(190, 22);
             productosToolStripMenuItem.Text = "Productos";
             productosToolStripMenuItem.Click += productosToolStripMenuItem_Click;
             // 
             // proveedoresToolStripMenuItem
             // 
             proveedoresToolStripMenuItem.Name = "proveedoresToolStripMenuItem";
-            proveedoresToolStripMenuItem.Size = new Size(139, 22);
+            proveedoresToolStripMenuItem.Size = new Size(190, 22);
             proveedoresToolStripMenuItem.Text = "Proveedores";
             // 
             // registroToolStripMenuItem
             // 
             registroToolStripMenuItem.Name = "registroToolStripMenuItem";
-            registroToolStripMenuItem.Size = new Size(139, 22);
+            registroToolStripMenuItem.Size = new Size(190, 22);
             registroToolStripMenuItem.Text = "Registro";
             registroToolStripMenuItem.Click += registroToolStripMenuItem_Click;
             // 
+            // historialDeInventarioToolStripMenuItem
+            // 
+            historialDeInventarioToolStripMenuItem.Name = "historialDeInventarioToolStripMenuItem";
+            historialDeInventarioToolStripMenuItem.Size = new Size(190, 22);
+            historialDeInventarioToolStripMenuItem.Text = "Historial de Inventario";
+            historialDeInventarioToolStripMenuItem.Click += historialDeInventarioToolStripMenuItem_Click;
+            // 
             // procesosToolStripMenuItem
             // 
-            procesosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { inventarioToolStripMenuItem, categoriasToolStripMenuItem, metodosDePagoToolStripMenuItem, estantesToolStripMenuItem });
+            procesosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { inventarioToolStripMenuItem, categoriasToolStripMenuItem, metodosDePagoToolStripMenuItem, estantesToolStripMenuItem, solicitarProductosToolStripMenuItem });
             procesosToolStripMenuItem.Name = "procesosToolStripMenuItem";
             procesosToolStripMenuItem.Size = new Size(66, 20);
             procesosToolStripMenuItem.Text = "Procesos";
@@ -92,30 +102,37 @@
             // inventarioToolStripMenuItem
             // 
             inventarioToolStripMenuItem.Name = "inventarioToolStripMenuItem";
-            inventarioToolStripMenuItem.Size = new Size(167, 22);
+            inventarioToolStripMenuItem.Size = new Size(180, 22);
             inventarioToolStripMenuItem.Text = "Inventario";
             inventarioToolStripMenuItem.Click += inventarioToolStripMenuItem_Click;
             // 
             // categoriasToolStripMenuItem
             // 
             categoriasToolStripMenuItem.Name = "categoriasToolStripMenuItem";
-            categoriasToolStripMenuItem.Size = new Size(167, 22);
+            categoriasToolStripMenuItem.Size = new Size(180, 22);
             categoriasToolStripMenuItem.Text = "Categorias";
             categoriasToolStripMenuItem.Click += categoriasToolStripMenuItem_Click;
             // 
             // metodosDePagoToolStripMenuItem
             // 
             metodosDePagoToolStripMenuItem.Name = "metodosDePagoToolStripMenuItem";
-            metodosDePagoToolStripMenuItem.Size = new Size(167, 22);
+            metodosDePagoToolStripMenuItem.Size = new Size(180, 22);
             metodosDePagoToolStripMenuItem.Text = "Metodos de Pago";
             metodosDePagoToolStripMenuItem.Click += metodosDePagoToolStripMenuItem_Click;
             // 
             // estantesToolStripMenuItem
             // 
             estantesToolStripMenuItem.Name = "estantesToolStripMenuItem";
-            estantesToolStripMenuItem.Size = new Size(167, 22);
+            estantesToolStripMenuItem.Size = new Size(180, 22);
             estantesToolStripMenuItem.Text = "Estantes";
             estantesToolStripMenuItem.Click += estantesToolStripMenuItem_Click;
+            // 
+            // solicitarProductosToolStripMenuItem
+            // 
+            solicitarProductosToolStripMenuItem.Name = "solicitarProductosToolStripMenuItem";
+            solicitarProductosToolStripMenuItem.Size = new Size(180, 22);
+            solicitarProductosToolStripMenuItem.Text = "Solicitar Productos";
+            solicitarProductosToolStripMenuItem.Click += solicitarProductosToolStripMenuItem_Click;
             // 
             // personalToolStripMenuItem
             // 
@@ -127,14 +144,14 @@
             // empleadosToolStripMenuItem
             // 
             empleadosToolStripMenuItem.Name = "empleadosToolStripMenuItem";
-            empleadosToolStripMenuItem.Size = new Size(132, 22);
+            empleadosToolStripMenuItem.Size = new Size(180, 22);
             empleadosToolStripMenuItem.Text = "Empleados";
             empleadosToolStripMenuItem.Click += empleadosToolStripMenuItem_Click;
             // 
             // cargosToolStripMenuItem
             // 
             cargosToolStripMenuItem.Name = "cargosToolStripMenuItem";
-            cargosToolStripMenuItem.Size = new Size(132, 22);
+            cargosToolStripMenuItem.Size = new Size(180, 22);
             cargosToolStripMenuItem.Text = "Usuarios";
             cargosToolStripMenuItem.Click += cargosToolStripMenuItem_Click;
             // 
@@ -148,9 +165,16 @@
             // baseDeDatosToolStripMenuItem
             // 
             baseDeDatosToolStripMenuItem.Name = "baseDeDatosToolStripMenuItem";
-            baseDeDatosToolStripMenuItem.Size = new Size(180, 22);
+            baseDeDatosToolStripMenuItem.Size = new Size(146, 22);
             baseDeDatosToolStripMenuItem.Text = "Base de datos";
             baseDeDatosToolStripMenuItem.Click += baseDeDatosToolStripMenuItem_Click;
+            // 
+            // almacenesToolStripMenuItem
+            // 
+            almacenesToolStripMenuItem.Name = "almacenesToolStripMenuItem";
+            almacenesToolStripMenuItem.Size = new Size(190, 22);
+            almacenesToolStripMenuItem.Text = "Almacenes";
+            almacenesToolStripMenuItem.Click += almacenesToolStripMenuItem_Click;
             // 
             // FormAvanzado
             // 
@@ -186,5 +210,8 @@
         private ToolStripMenuItem registroToolStripMenuItem;
         private ToolStripMenuItem configuracionToolStripMenuItem;
         private ToolStripMenuItem baseDeDatosToolStripMenuItem;
+        private ToolStripMenuItem historialDeInventarioToolStripMenuItem;
+        private ToolStripMenuItem solicitarProductosToolStripMenuItem;
+        private ToolStripMenuItem almacenesToolStripMenuItem;
     }
 }

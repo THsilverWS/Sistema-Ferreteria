@@ -39,10 +39,6 @@ namespace SistemaFerreteria
             AbrirFormEnPanel(new FormGestionPersonal());
         }
 
-        private void btnPerfil_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void btnProductos_Click(object sender, EventArgs e)
         {
@@ -52,7 +48,7 @@ namespace SistemaFerreteria
 
         private void button7_Click(object sender, EventArgs e)
         {
-
+            
         }
 
         private void button6_Click(object sender, EventArgs e)
@@ -64,7 +60,6 @@ namespace SistemaFerreteria
         {
             FormAvanzado formularioMenu = new FormAvanzado();
 
-            // 2. Lo mostramos en pantalla completa
             formularioMenu.Show();
         }
     }

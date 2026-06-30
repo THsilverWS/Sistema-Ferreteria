@@ -86,6 +86,27 @@ namespace SistemaFerreteria
             frm.MdiParent = this;
             frm.Show();
         }
+
+        private void historialDeInventarioToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormHistorialInventario frm = new FormHistorialInventario();
+            frm.MdiParent = this;
+            frm.Show();
+        }
+
+        private void solicitarProductosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormTrasladoInventario frm = new FormTrasladoInventario();
+            frm.MdiParent = this;
+            frm.Show();
+        }
+
+        private void almacenesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormAlmacenes frm = new FormAlmacenes();
+            frm.MdiParent = this;
+            frm.Show();
+        }
     }
 
 }

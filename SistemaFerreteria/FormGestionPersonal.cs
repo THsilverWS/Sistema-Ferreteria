@@ -2,13 +2,12 @@
 using System;
 using System.Data;
 using System.Windows.Forms;
-using SistemaFerreteria.Model; // 🌟 Agregado para usar tu clase centralizada Conexion
+using SistemaFerreteria.Model;
 
 namespace SistemaFerreteria
 {
     public partial class FormGestionPersonal : Form
     {
-        // 🌟 Reemplazamos la cadena directa por tu objeto de conexión centralizado
         private readonly Conexion conexionBase = new Conexion();
 
         public FormGestionPersonal()
@@ -26,9 +25,6 @@ namespace SistemaFerreteria
             CargarPersonal();
         }
 
-        // =========================================================
-        // 1. CONFIGURAR COLUMNAS ASIGNADAS AL SCRIPT SQL
-        // =========================================================
         private void ConfigurarColumnas()
         {
             dgvPersonal.Columns.Clear();
@@ -37,10 +33,9 @@ namespace SistemaFerreteria
             AgregarColumna("dni_empleado", "DNI Personal");
             AgregarColumna("nom_empleado", "Nombre Completo");
             AgregarColumna("usu_empleado", "Nombre de Usuario");
-            AgregarColumna("nom_rol", "Rol de Acceso"); // 🌟 Sincronizado con la columna del JOIN de Roles
+            AgregarColumna("nom_rol", "Rol de Acceso");
             AgregarColumna("EstadoTexto", "Estado");
 
-            // Columna Botón Editar
             DataGridViewButtonColumn btnEditar = new DataGridViewButtonColumn();
             btnEditar.Name = "btnEditar";
             btnEditar.HeaderText = "Acción";
@@ -48,7 +43,6 @@ namespace SistemaFerreteria
             btnEditar.UseColumnTextForButtonValue = true;
             dgvPersonal.Columns.Add(btnEditar);
 
-            // Columna Botón Eliminar
             DataGridViewButtonColumn btnEliminar = new DataGridViewButtonColumn();
             btnEliminar.Name = "btnEliminar";
             btnEliminar.HeaderText = "Acción";
@@ -67,17 +61,12 @@ namespace SistemaFerreteria
             dgvPersonal.Columns.Add(col);
         }
 
-        // =========================================================
-        // 2. CARGAR PERSONAL DESDE TABLA Empleados
-        // =========================================================
         public void CargarPersonal(string filtroBusqueda = "")
         {
             try
             {
-                // 🌟 Ajustado con conexionBase
                 using (SqlConnection conexion = conexionBase.ObtenerConexion())
                 {
-                    // 🌟 ACTUALIZADO: INNER JOIN con Roles para traer nom_rol igual que en EmpleadosDAO
                     string query = @"
                         SELECT 
                             E.dni_empleado,
@@ -151,21 +140,14 @@ namespace SistemaFerreteria
             }
         }
 
-        // =========================================================
-        // 5. ELIMINAR PERSONAL DE LA BASE DE DATOS
-        // =========================================================
         private void EliminarPersonal(string dni)
         {
             try
             {
-                // 🌟 Ajustado con conexionBase
                 using (SqlConnection conexion = conexionBase.ObtenerConexion())
                 {
                     conexion.Open();
 
-                    // =========================================================================
-                    // 🌟 FIRMAMOS EL CONTEXTO DE SEGURIDAD PARA QUE EL TRIGGER SEPA QUIÉN ELIMINÓ
-                    // =========================================================================
                     conexionBase.AsignarContextoSeguridad(conexion);
 
                     string query = "DELETE FROM Empleados WHERE dni_empleado = @dni";

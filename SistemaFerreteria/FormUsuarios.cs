@@ -29,7 +29,7 @@ namespace SistemaFerreteria
         private void FormUsuarios_Load(object sender, EventArgs e)
         {
             CargarComboEmpleados();
-            CargarComboCargos(); // Carga la lista general de Roles
+            CargarComboCargos();
             RefrescarGrid();
             LimpiarCampos();
         }
@@ -40,7 +40,7 @@ namespace SistemaFerreteria
                 _dtEmpleados = _empleadoDao.ObtenerEmpleadosActivos();
                 cmbEmpleado.DataSource = _dtEmpleados;
                 cmbEmpleado.DisplayMember = "nom_empleado";
-                cmbEmpleado.ValueMember = "dni_empleado"; // El valor interno será su DNI
+                cmbEmpleado.ValueMember = "dni_empleado";
                 cmbEmpleado.SelectedIndex = -1;
             }
             catch (Exception ex) { MessageBox.Show(ex.Message, "Error"); }
@@ -71,7 +71,6 @@ namespace SistemaFerreteria
                 string dni = cmbEmpleado.SelectedValue.ToString();
                 txtDni.Text = dni;
 
-                // Buscamos el id_rol del empleado seleccionado para pintarlo en el combo Cargo
                 DataRow[] filas = _dtEmpleados.Select($"dni_empleado = '{dni}'");
                 if (filas.Length > 0)
                 {
@@ -149,7 +148,7 @@ namespace SistemaFerreteria
                 cmbEmpleado.Text = fila.Cells["Empleado"].Value.ToString();
                 cmbCargo.Text = fila.Cells["Cargo"].Value.ToString();
 
-                cmbEmpleado.Enabled = false; // Bloqueado, no puedes transferir el usuario de un empleado a otro
+                cmbEmpleado.Enabled = false;
 
                 btnGuardar.Enabled = false;
                 btnEditar.Enabled = true;
@@ -190,9 +189,8 @@ namespace SistemaFerreteria
                 return;
             }
 
-            // Le pasamos el alias "USUARIO" para que tu ventana sepa qué plantilla usar
             FormExportarImportar ventanaExportar = new FormExportarImportar("EXPORTAR", "USUARIO", dt);
-    ventanaExportar.ShowDialog();
+            ventanaExportar.ShowDialog();
         }
     }
 }

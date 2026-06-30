@@ -14,10 +14,6 @@ namespace SistemaFerreteria
             InitializeComponent();
         }
 
-
-        // =========================================================
-        // 1. CARGAR Y MOSTRAR TODAS LAS VENTAS 
-        // =========================================================
         public void CargarVentas(string filtroCliente = "", string filtroEmpleado = "")
         {
             try
@@ -72,17 +68,12 @@ namespace SistemaFerreteria
             }
         }
 
-        // =========================================================
-        // 2. BUSCADORES EN TIEMPO REAL
-        // =========================================================
+
         private void txtBuscarCliente_TextChanged_1(object sender, EventArgs e)
         {
             CargarVentas(txtBuscarCliente.Text.Trim(), txtBuscarEmpleadoDNI.Text.Trim());
         }
 
-        // =========================================================
-        // 3. RECARGAR LA TABLA
-        // =========================================================
         private void btnActualizar_Click(object sender, EventArgs e)
         {
             txtBuscarCliente.Clear();
@@ -91,9 +82,6 @@ namespace SistemaFerreteria
             CargarVentas();
         }
 
-        // =========================================================
-        // 4. ELIMINAR REGISTROS
-        // =========================================================
         private void btnEliminar_Click(object sender, EventArgs e)
         {
             if (dgvVentas.SelectedRows.Count == 0)

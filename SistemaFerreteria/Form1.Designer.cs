@@ -31,22 +31,29 @@
             dgvProductos = new DataGridView();
             btnCargar = new Button();
             sqlCommand1 = new Microsoft.Data.SqlClient.SqlCommand();
+            panel1 = new Panel();
             ((System.ComponentModel.ISupportInitialize)dgvProductos).BeginInit();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // dgvProductos
             // 
+            dgvProductos.AllowUserToAddRows = false;
+            dgvProductos.AllowUserToDeleteRows = false;
+            dgvProductos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvProductos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvProductos.Dock = DockStyle.Bottom;
-            dgvProductos.Location = new Point(0, 107);
+            dgvProductos.Dock = DockStyle.Fill;
+            dgvProductos.Location = new Point(0, 100);
             dgvProductos.Name = "dgvProductos";
             dgvProductos.ReadOnly = true;
-            dgvProductos.Size = new Size(800, 343);
+            dgvProductos.RowHeadersVisible = false;
+            dgvProductos.Size = new Size(800, 350);
             dgvProductos.TabIndex = 0;
             // 
             // btnCargar
             // 
-            btnCargar.Location = new Point(326, 50);
+            btnCargar.Anchor = AnchorStyles.Top;
+            btnCargar.Location = new Point(331, 38);
             btnCargar.Name = "btnCargar";
             btnCargar.Size = new Size(136, 23);
             btnCargar.TabIndex = 1;
@@ -59,17 +66,27 @@
             sqlCommand1.CommandTimeout = 30;
             sqlCommand1.EnableOptimizedParameterBinding = false;
             // 
+            // panel1
+            // 
+            panel1.Controls.Add(btnCargar);
+            panel1.Dock = DockStyle.Top;
+            panel1.Location = new Point(0, 0);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(800, 100);
+            panel1.TabIndex = 2;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(btnCargar);
             Controls.Add(dgvProductos);
+            Controls.Add(panel1);
             Name = "Form1";
             Text = "Form1";
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)dgvProductos).EndInit();
+            panel1.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -78,5 +95,6 @@
         private DataGridView dgvProductos;
         private Button btnCargar;
         private Microsoft.Data.SqlClient.SqlCommand sqlCommand1;
+        private Panel panel1;
     }
 }

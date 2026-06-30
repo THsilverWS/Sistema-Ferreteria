@@ -122,9 +122,9 @@
             label2.AutoSize = true;
             label2.Location = new Point(146, 117);
             label2.Name = "label2";
-            label2.Size = new Size(164, 16);
+            label2.Size = new Size(147, 16);
             label2.TabIndex = 8;
-            label2.Text = "La mejor ferreteria de tu cerro";
+            label2.Text = "La mejor ferreteria del pais";
             // 
             // linkLabel1
             // 

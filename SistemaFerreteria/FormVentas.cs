@@ -2,13 +2,12 @@
 using System;
 using System.Data;
 using System.Windows.Forms;
-using SistemaFerreteria.Model; // 🌟 Agregado para usar tu clase Conexion y UsuarioSesion
+using SistemaFerreteria.Model;
 
 namespace SistemaFerreteria
 {
     public partial class FormVentas : Form
     {
-        // 🌟 Reemplazamos la cadena directa por tu objeto de conexión centralizado
         private readonly Conexion conexionBase = new Conexion();
         private string dniEmpleadoLogueado;
         private DataTable carrito;
@@ -16,7 +15,6 @@ namespace SistemaFerreteria
         public FormVentas(string dniEmpleado)
         {
             InitializeComponent();
-            // 🌟 Si por alguna razón dniEmpleado viene vacío, aseguramos el tiro con la sesión global
             this.dniEmpleadoLogueado = string.IsNullOrEmpty(dniEmpleado) ? UsuarioSesion.DniEmpleadoLogueado : dniEmpleado;
             ConfigurarCarrito();
         }
@@ -52,7 +50,6 @@ namespace SistemaFerreteria
 
             string query = "SELECT id_producto, nom_producto, pre_venta FROM Productos WHERE cod_barras = @cod";
 
-            // 🌟 Ajustado con conexionBase
             using (SqlConnection conexion = conexionBase.ObtenerConexion())
             using (SqlCommand comando = new SqlCommand(query, conexion))
             {

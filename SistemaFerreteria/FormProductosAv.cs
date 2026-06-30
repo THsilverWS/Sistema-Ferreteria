@@ -35,10 +35,8 @@ namespace SistemaFerreteria
         {
             try
             {
-                // Traemos solo los 10 de la página actual
                 dgvProductos.DataSource = _productoDao.ObtenerProductosPorPagina(paginaActual, tamañoPagina);
 
-                // Muestra en la etiqueta en qué página vas
                 lblPagina.Text = $"Página: {paginaActual}";
             }
             catch (Exception ex)
@@ -50,21 +48,21 @@ namespace SistemaFerreteria
         {
             try
             {
-                // 1. Cargar Categorías
+                // Cargar Categorías
                 DataTable dtCat = _productoDao.ObtenerCategorias();
                 cmbCategoria.DataSource = dtCat;
                 cmbCategoria.DisplayMember = "nom_categoria";
                 cmbCategoria.ValueMember = "id_categoria";
                 cmbCategoria.SelectedIndex = -1;
 
-                // 2. Cargar Proveedores
+                // Cargar Proveedores
                 DataTable dtProv = _productoDao.ObtenerProveedores();
                 cmbProveedor.DataSource = dtProv;
                 cmbProveedor.DisplayMember = "raz_proveedor";
                 cmbProveedor.ValueMember = "ruc_proveedor";
                 cmbProveedor.SelectedIndex = -1;
 
-                // 3. Cargar Estantes
+                // Cargar Estantes
                 DataTable dtEst = _productoDao.ObtenerEstantes();
                 cmbEstante.DataSource = dtEst;
                 cmbEstante.DisplayMember = "ubi_estante";
@@ -147,9 +145,6 @@ namespace SistemaFerreteria
                 txtPrecioCompra.Text = fila.Cells["P. Compra"].Value.ToString();
                 txtPrecioVenta.Text = fila.Cells["P. Venta"].Value.ToString();
 
-                // CORREGIDO: En lugar de buscar por los textos descriptivos que ya no se consultan,
-                // mapeamos mediante SelectedValue si tuvieras los IDs ocultos en la grilla.
-                // Si la consulta del DAO de la página no incluye IDs de llaves foráneas, dejamos los combos intactos para evitar caídas.
                 if (dgvProductos.Columns.Contains("id_categoria") && fila.Cells["id_categoria"].Value != null)
                 {
                     cmbCategoria.SelectedValue = fila.Cells["id_categoria"].Value;
@@ -222,14 +217,12 @@ namespace SistemaFerreteria
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
-            // 1. Verificar que haya un producto seleccionado
             if (string.IsNullOrEmpty(txtIdProducto.Text))
             {
                 MessageBox.Show("Por favor, seleccione un producto de la tabla para eliminar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // 2. Preguntar al usuario si realmente está seguro
             DialogResult resultado = MessageBox.Show("¿Está completamente seguro de eliminar este producto? Esta acción no se puede deshacer.",
                                                      "Confirmar Eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
@@ -239,14 +232,13 @@ namespace SistemaFerreteria
                 {
                     int idProducto = Convert.ToInt32(txtIdProducto.Text);
 
-                    // Llamamos al DAO
                     bool exito = productoDao.EliminarProducto(idProducto);
 
                     if (exito)
                     {
                         MessageBox.Show("¡Producto eliminado exitosamente!", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        RefrescarTabla(); // Recarga la grilla[cite: 2]
-                        LimpiarCampos();   // Restablece cajas, botones y colores[cite: 2]
+                        RefrescarTabla(); 
+                        LimpiarCampos();  
                     }
                 }
                 catch (Exception ex)
@@ -260,7 +252,6 @@ namespace SistemaFerreteria
         {
             try
             {
-                // 🌟 EN LUGAR DE AGARRAR EL DGV CON LOS 10 REGISTROS, TRAEMOS LOS 100 COMPLETOS DESDE EL DAO
                 DataTable dtCompleto = _productoDao.ListarProductos();
 
                 if (dtCompleto == null || dtCompleto.Rows.Count == 0)
@@ -269,7 +260,6 @@ namespace SistemaFerreteria
                     return;
                 }
 
-                // Le pasamos la tabla completa con los 100 productos a tu ventana flotante
                 FormExportarImportar ventanaExportar = new FormExportarImportar("EXPORTAR", "PRODUCTO", dtCompleto);
                 ventanaExportar.ShowDialog();
             }
@@ -281,11 +271,10 @@ namespace SistemaFerreteria
 
         private void btnImportar_Click(object sender, EventArgs e)
         {
-            // AJUSTADO: Ahora le pasamos el tipo "PRODUCTO" y 'null' en la tabla
             FormExportarImportar ventanaImportar = new FormExportarImportar("IMPORTAR", "PRODUCTO", null); //
             if (ventanaImportar.ShowDialog() == DialogResult.OK) //
             {
-                RefrescarTabla(); // Si importó con éxito, refresca la grilla principal automáticamente[cite: 4]
+                RefrescarTabla(); 
             }
         }
 
@@ -298,15 +287,14 @@ namespace SistemaFerreteria
             {
                 try
                 {
-                    // Ejecutamos la limpieza a través del objeto que ya usas en todo tu formulario
                     bool exito = productoDao.VaciarTablaProductos();
 
                     if (exito)
                     {
                         MessageBox.Show("¡Tabla de productos vaciada con éxito! Los IDs se reiniciaron a 1.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                        RefrescarTabla(); // Borra visualmente la grilla principal
-                        LimpiarCampos();   // Restablece los bloqueos de tus botones
+                        RefrescarTabla();
+                        LimpiarCampos();  
                     }
                 }
                 catch (Exception ex)
@@ -318,13 +306,11 @@ namespace SistemaFerreteria
 
         private void btnSiguiente_Click(object sender, EventArgs e)
         {
-            // Obtenemos cuántos productos existen en toda la base de datos
             int totalProductos = _productoDao.ObtenerTotalProductos();
 
-            // Si lo que ya mostramos es menor al total, significa que hay más data adelante
             if ((paginaActual * tamañoPagina) < totalProductos)
             {
-                paginaActual++; // Avanzamos con seguridad
+                paginaActual++; 
                 RefrescarTabla();
             }
             else
@@ -337,8 +323,8 @@ namespace SistemaFerreteria
         {
             if (paginaActual > 1)
             {
-                paginaActual--; // Restamos una página
-                RefrescarTabla(); // Volvemos a cargar la grilla
+                paginaActual--;
+                RefrescarTabla(); 
             }
         }
     }

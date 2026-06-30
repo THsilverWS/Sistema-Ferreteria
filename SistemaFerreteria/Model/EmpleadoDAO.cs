@@ -9,14 +9,10 @@ namespace SistemaFerreteria.Model
     {
         private readonly Conexion conexionBase = new Conexion();
 
-        /// <summary>
-        /// Valida las credenciales del usuario y obtiene sus datos de perfil con su rol correspondiente.
-        /// </summary>
         public DataTable ValidarLogin(string usuario, string contrasena)
         {
             DataTable resultado = new DataTable();
 
-            // 🌟 CORREGIDO: Traemos también est_empleado y quitamos el filtro fijo del WHERE
             string query = @"SELECT E.dni_empleado, R.nom_rol, E.est_empleado 
                      FROM Empleados E
                      INNER JOIN Roles R ON E.id_rol = R.id_rol
@@ -51,7 +47,6 @@ namespace SistemaFerreteria.Model
             DataTable dt = new DataTable();
             using (SqlConnection con = conexionBase.ObtenerConexion())
             {
-                // Usamos un CASE para transformar el bit (1 o 0) en un texto limpio para tu grilla[cite: 1]
                 string query = @"
             SELECT 
                 ROW_NUMBER() OVER (ORDER BY E.fec_añadido ASC) AS [ID],
@@ -61,7 +56,7 @@ namespace SistemaFerreteria.Model
                 CONVERT(VARCHAR(10), E.fec_añadido, 103) AS [Fecha de Añadido],
                 CASE WHEN E.est_empleado = 1 THEN 'Activo' ELSE 'Inactivo' END AS [Estado]
             FROM Empleados E
-            INNER JOIN Roles R ON E.id_rol = R.id_rol;"; // Quitamos el filtro WHERE para verlos a todos
+            INNER JOIN Roles R ON E.id_rol = R.id_rol;";
 
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
@@ -80,7 +75,6 @@ namespace SistemaFerreteria.Model
             DataTable dt = new DataTable();
             using (SqlConnection con = conexionBase.ObtenerConexion())
             {
-                // Traemos el ID y el Nombre de los cargos para llenar el ComboBox
                 string query = "SELECT id_rol, nom_rol FROM Roles ORDER BY nom_rol ASC;";
 
                 using (SqlCommand cmd = new SqlCommand(query, con))
@@ -101,9 +95,6 @@ namespace SistemaFerreteria.Model
             }
             return dt;
         }
-        // =========================================================================
-        // 🚀 INSERTAR EMPLEADO (Sin usuario ni contraseña por ahora)
-        // =========================================================================
         public bool InsertarEmpleado(string dni, string nombre, string usuario, string contraseña, int idRol, DateTime fechaAñadido)
         {
             using (SqlConnection con = conexionBase.ObtenerConexion())
@@ -136,10 +127,6 @@ namespace SistemaFerreteria.Model
             }
         }
 
-        // =========================================================================
-        // 🔄 MODIFICAR EMPLEADO (UPDATE basado en el DNI)
-        // =========================================================================
-
 
 
         public bool ModificarEmpleadoConEstado(string dni, string nombre, int idRol, DateTime fechaAñadido, bool estado)
@@ -151,7 +138,7 @@ namespace SistemaFerreteria.Model
             SET nom_empleado = @nombre, 
                 id_rol = @idRol,
                 est_empleado = @estado
-            WHERE dni_empleado = @dni;"; // (Ajustado sin fec_añadido si lo manejas aparte)[cite: 1, 4]
+            WHERE dni_empleado = @dni;";
 
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
@@ -164,7 +151,6 @@ namespace SistemaFerreteria.Model
                     {
                         con.Open();
 
-                        // 🌟 LLAMADA CLAVE: Le inyectamos el DNI del que está clickeando el botón antes del execute
                         conexionBase.AsignarContextoSeguridad(con);
 
                         return cmd.ExecuteNonQuery() > 0;
@@ -174,13 +160,6 @@ namespace SistemaFerreteria.Model
             }
         }
 
-        // =========================================================================
-        // 🔑 MÉTODOS ADICIONALES PARA EL PANEL DE USUARIOS
-        // =========================================================================
-
-        /// <summary>
-        /// Obtiene la lista de empleados que ya cuentan con un usuario asignado para el panel de credenciales.
-        /// </summary>
         public DataTable ObtenerUsuariosParaPanel()
         {
             DataTable dt = new DataTable();
@@ -211,9 +190,6 @@ namespace SistemaFerreteria.Model
             return dt;
         }
 
-        /// <summary>
-        /// Obtiene todos los empleados activos para vincularlos en el ComboBox del panel de Usuarios.
-        /// </summary>
         public DataTable ObtenerEmpleadosActivos()
         {
             DataTable dt = new DataTable();
@@ -233,9 +209,6 @@ namespace SistemaFerreteria.Model
             return dt;
         }
 
-        /// <summary>
-        /// Actualiza o asigna las credenciales de acceso (Usuario y Contraseña) basadas en el DNI.
-        /// </summary>
         public bool ActualizarCredenciales(string dni, string usuario, string contraseña)
         {
             using (SqlConnection con = conexionBase.ObtenerConexion())
@@ -261,6 +234,31 @@ namespace SistemaFerreteria.Model
                     catch (Exception ex) { throw new Exception("Error al actualizar credenciales: " + ex.Message); }
                 }
             }
+        }
+        public DataTable ObtenerTodosLosEmpleadosBase()
+        {
+            DataTable dt = new DataTable();
+            using (SqlConnection con = conexionBase.ObtenerConexion())
+            {
+                string query = "SELECT dni_empleado, nom_empleado, usu_empleado, con_empleado, id_rol, est_empleado FROM Empleados;";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    try
+                    {
+                        con.Open();
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Error al consultar datos base de empleados: " + ex.Message);
+                    }
+                }
+            }
+            return dt;
         }
 
     }

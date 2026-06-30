@@ -11,11 +11,10 @@ namespace SistemaFerreteria
 {
     public partial class FormExportarImportar : Form
     {
-        private string _tipoOperacion; // "EXPORTAR" o "IMPORTAR"
-        private string _tipoMantenimiento; // "CATEGORIA", "METODO_PAGO", "ESTANTE" o "PRODUCTO"
-        private DataTable _tablaDatos; // Datos actuales cargados en la grilla del padre
+        private string _tipoOperacion;
+        private string _tipoMantenimiento; 
+        private DataTable _tablaDatos;
         
-        // DAOs para procesar según corresponda
         private readonly MantenimientoComunDAO _comunDao = new MantenimientoComunDAO();
         private readonly ProductoDAO _productoDao = new ProductoDAO();
         public FormExportarImportar(string tipoOperacion, string tipoMantenimiento, DataTable tablaDatos)
@@ -23,7 +22,7 @@ namespace SistemaFerreteria
             InitializeComponent();
             _tipoOperacion = tipoOperacion.ToUpper();
             _tipoMantenimiento = tipoMantenimiento.ToUpper();
-            _tablaDatos = tablaDatos; // Recibe la grilla actual 
+            _tablaDatos = tablaDatos;  
 
             ConfigurarInterfaz();
         }
@@ -39,7 +38,7 @@ namespace SistemaFerreteria
             {
                 this.Text = "Importar Datos - " + _tipoMantenimiento;
                 btnAccion.Text = "Importar";
-                rbExcel.Checked = true; // Por defecto arranca seleccionado Excel
+                rbExcel.Checked = true; 
             }
         }
 
@@ -87,9 +86,6 @@ namespace SistemaFerreteria
             {
                 List<string> lineas = new List<string>();  
 
-                // ==========================================
-                // CASO ESPECIAL: VIENE DESDE MANTENEDOR COMÚN
-                // ==========================================
                 if (_tipoMantenimiento != "PRODUCTO")
                 {
                     if (rbExcel.Checked) // CSV
@@ -110,9 +106,7 @@ namespace SistemaFerreteria
                         System.IO.File.WriteAllLines(txtRuta.Text, lineas, Encoding.Unicode);
                     }
                 }
-                // ==========================================
-                // CASO ORIGINAL: VIENE DESDE TU TABLA PRODUCTOS
-                // ==========================================
+
                 else
                 {
                     if (rbExcel.Checked)  
@@ -151,13 +145,11 @@ namespace SistemaFerreteria
                 string[] lineas = System.IO.File.ReadAllLines(txtRuta.Text);  
                 int insertados = 0, errores = 0;  
 
-                // ==========================================
-                // IMPORTACIÓN PARA CATEGORIAS/ESTANTES/PAGOS
-                // ==========================================
+
                 if (_tipoMantenimiento != "PRODUCTO")
                 {
                     char separador = rbExcel.Checked ? ';' : '|';
-                    int inicioLinea = rbExcel.Checked ? 1 : 0; // Se salta cabecera en Excel
+                    int inicioLinea = rbExcel.Checked ? 1 : 0; 
 
                     for (int i = inicioLinea; i < lineas.Length; i++)
                     {
@@ -173,9 +165,7 @@ namespace SistemaFerreteria
                         }
                     }
                 }
-                // ==========================================
-                // IMPORTACIÓN ORIGINAL PARA TU TABLA PRODUCTOS
-                // ==========================================
+
                 else
                 {
                     if (rbExcel.Checked)  

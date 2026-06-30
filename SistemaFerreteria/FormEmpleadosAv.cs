@@ -18,7 +18,6 @@ namespace SistemaFerreteria
         {
             InitializeComponent();
 
-            // Configuraciones base para que tu tabla se vea idéntica a tu captura
             dgvEmpleados.AllowUserToAddRows = false;
             dgvEmpleados.ReadOnly = true;
             dgvEmpleados.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -29,7 +28,7 @@ namespace SistemaFerreteria
         {
             CargarComboRoles();
             RefrescarGrid();
-            LimpiarCampos(); 
+            LimpiarCampos();
         }
 
         private void CargarComboRoles()
@@ -50,7 +49,6 @@ namespace SistemaFerreteria
             {
                 dgvEmpleados.DataSource = _empleadoDao.ObtenerEmpleadosParaPanel();
 
-                // Ajuste de proporciones basado en tu imagen de referencia
                 if (dgvEmpleados.Columns.Contains("ID")) dgvEmpleados.Columns["ID"].FillWeight = 40;
                 if (dgvEmpleados.Columns.Contains("DNI")) dgvEmpleados.Columns["DNI"].FillWeight = 80;
                 if (dgvEmpleados.Columns.Contains("Empleado")) dgvEmpleados.Columns["Empleado"].FillWeight = 160;
@@ -73,16 +71,14 @@ namespace SistemaFerreteria
 
             try
             {
-                // 🌟 AGREGADO: Capturamos si se marcó como Activo (1) o Inactivo (0)
                 bool estado = chkEstado.Checked;
 
-                // Mandamos el estado al método de actualización del DAO
                 bool exito = _empleadoDao.ModificarEmpleadoConEstado(
                     txtDni.Text.Trim(),
             txtNombre.Text.Trim(),
             Convert.ToInt32(cmbCargo.SelectedValue),
             dtpFechaAñadido.Value,
-            estado // 🌟 Enviamos el bit a SQL Server
+            estado
         );
 
                 if (exito)
@@ -105,16 +101,14 @@ namespace SistemaFerreteria
 
             try
             {
-                // 🌟 AGREGADO: Capturamos si se marcó como Activo (1) o Inactivo (0)
                 bool estado = chkEstado.Checked;
 
-                // Mandamos el estado al método de actualización del DAO
                 bool exito = _empleadoDao.ModificarEmpleadoConEstado(
                     txtDni.Text.Trim(),
             txtNombre.Text.Trim(),
             Convert.ToInt32(cmbCargo.SelectedValue),
             dtpFechaAñadido.Value,
-            estado // 🌟 Enviamos el bit a SQL Server
+            estado
         );
 
                 if (exito)
@@ -137,7 +131,6 @@ namespace SistemaFerreteria
                 txtDni.Text = fila.Cells["DNI"].Value.ToString();
                 txtNombre.Text = fila.Cells["Empleado"].Value.ToString();
 
-                // Validación de fecha
                 var valorFecha = fila.Cells["Fecha de Añadido"].Value;
                 if (valorFecha != null && valorFecha != DBNull.Value && !string.IsNullOrEmpty(valorFecha.ToString()))
                     dtpFechaAñadido.Value = Convert.ToDateTime(valorFecha);
@@ -147,7 +140,6 @@ namespace SistemaFerreteria
                 string cargoFila = fila.Cells["Cargo"].Value.ToString();
                 cmbCargo.SelectedIndex = cmbCargo.FindStringExact(cargoFila);
 
-                // 🌟 AGREGADO: Leemos el estado de la grilla (si dice "Activo" se marca, si no, se desmarca)
                 if (dgvEmpleados.Columns.Contains("Estado"))
                 {
                     string estadoFila = fila.Cells["Estado"].Value.ToString();
@@ -182,7 +174,6 @@ namespace SistemaFerreteria
             cmbCargo.SelectedIndex = -1;
             dtpFechaAñadido.Value = DateTime.Now;
 
-            // 🌟 AGREGADO: Por defecto, un empleado nuevo arranca Activo (Checked = true)[cite: 1]
             chkEstado.Checked = true;
 
             btnGuardar.Enabled = true;
@@ -190,21 +181,7 @@ namespace SistemaFerreteria
             btnEliminar.Enabled = false;
         }
 
-        // =========================================================================
-        // 🚀 CONECTADO CON TU COMPONENTE EXPORTADOR REUTILIZABLE
-        // =========================================================================
-        private void btnExportar_Click(object sender, EventArgs e)
-        {
-            DataTable dt = (DataTable)dgvEmpleados.DataSource;
-            if (dt == null || dt.Rows.Count == 0)
-            {
-                MessageBox.Show("No hay datos disponibles en la tabla para exportar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
 
-            // CORREGIDO: Abre tu ventana genérica pasando el alias "EMPLEADO"
-            FormExportarImportar ventanaExportar = new FormExportarImportar("EXPORTAR", "EMPLEADO", dt);
-            ventanaExportar.ShowDialog();
-        }
+
     }
 }

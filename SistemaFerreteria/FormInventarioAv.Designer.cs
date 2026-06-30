@@ -40,7 +40,6 @@
             numStockActual = new NumericUpDown();
             label4 = new Label();
             label6 = new Label();
-            btnPrueba = new Button();
             btnEditar = new Button();
             label1 = new Label();
             btnImportar = new Button();
@@ -48,11 +47,9 @@
             btnExportar = new Button();
             label2 = new Label();
             btnLimpiar = new Button();
-            label3 = new Label();
             btnActualizar = new Button();
             txtProducto = new TextBox();
             btnEliminar = new Button();
-            txtAlmacen = new TextBox();
             btnGuardar = new Button();
             label5 = new Label();
             txtIdProducto = new TextBox();
@@ -150,7 +147,6 @@
             panel1.Controls.Add(numStockActual);
             panel1.Controls.Add(label4);
             panel1.Controls.Add(label6);
-            panel1.Controls.Add(btnPrueba);
             panel1.Controls.Add(btnEditar);
             panel1.Controls.Add(label1);
             panel1.Controls.Add(btnImportar);
@@ -158,11 +154,9 @@
             panel1.Controls.Add(btnExportar);
             panel1.Controls.Add(label2);
             panel1.Controls.Add(btnLimpiar);
-            panel1.Controls.Add(label3);
             panel1.Controls.Add(btnActualizar);
             panel1.Controls.Add(txtProducto);
             panel1.Controls.Add(btnEliminar);
-            panel1.Controls.Add(txtAlmacen);
             panel1.Controls.Add(btnGuardar);
             panel1.Controls.Add(label5);
             panel1.Controls.Add(txtIdProducto);
@@ -204,15 +198,6 @@
             label6.TabIndex = 30;
             label6.Text = "Stock Minimo";
             // 
-            // btnPrueba
-            // 
-            btnPrueba.Location = new Point(650, 23);
-            btnPrueba.Name = "btnPrueba";
-            btnPrueba.Size = new Size(75, 23);
-            btnPrueba.TabIndex = 28;
-            btnPrueba.Text = "Prueba";
-            btnPrueba.UseVisualStyleBackColor = true;
-            // 
             // btnEditar
             // 
             btnEditar.Location = new Point(245, 202);
@@ -221,6 +206,7 @@
             btnEditar.TabIndex = 27;
             btnEditar.Text = "Editar";
             btnEditar.UseVisualStyleBackColor = true;
+            btnEditar.Click += btnEditar_Click;
             // 
             // label1
             // 
@@ -239,6 +225,7 @@
             btnImportar.TabIndex = 26;
             btnImportar.Text = "Importar";
             btnImportar.UseVisualStyleBackColor = true;
+            btnImportar.Click += btnImportar_Click;
             // 
             // txtBuscar
             // 
@@ -256,11 +243,12 @@
             btnExportar.TabIndex = 25;
             btnExportar.Text = "Exportar";
             btnExportar.UseVisualStyleBackColor = true;
+            btnExportar.Click += btnExportar_Click;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(20, 78);
+            label2.Location = new Point(10, 81);
             label2.Name = "label2";
             label2.Size = new Size(56, 15);
             label2.TabIndex = 2;
@@ -274,15 +262,7 @@
             btnLimpiar.TabIndex = 24;
             btnLimpiar.Text = "Limpiar";
             btnLimpiar.UseVisualStyleBackColor = true;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(20, 113);
-            label3.Name = "label3";
-            label3.Size = new Size(54, 15);
-            label3.TabIndex = 3;
-            label3.Text = "Almacen";
+            btnLimpiar.Click += btnLimpiar_Click;
             // 
             // btnActualizar
             // 
@@ -295,7 +275,7 @@
             // 
             // txtProducto
             // 
-            txtProducto.Location = new Point(82, 70);
+            txtProducto.Location = new Point(72, 73);
             txtProducto.Name = "txtProducto";
             txtProducto.ReadOnly = true;
             txtProducto.Size = new Size(212, 23);
@@ -309,13 +289,7 @@
             btnEliminar.TabIndex = 22;
             btnEliminar.Text = "Eliminar";
             btnEliminar.UseVisualStyleBackColor = true;
-            // 
-            // txtAlmacen
-            // 
-            txtAlmacen.Location = new Point(82, 110);
-            txtAlmacen.Name = "txtAlmacen";
-            txtAlmacen.Size = new Size(212, 23);
-            txtAlmacen.TabIndex = 6;
+            btnEliminar.Click += btnEliminar_Click;
             // 
             // btnGuardar
             // 
@@ -377,7 +351,6 @@
         private Button btnAnterior;
         private Button btnSiguiente;
         private Panel panel1;
-        private Button btnPrueba;
         private Button btnEditar;
         private Label label1;
         private Button btnImportar;
@@ -385,11 +358,9 @@
         private Button btnExportar;
         private Label label2;
         private Button btnLimpiar;
-        private Label label3;
         private Button btnActualizar;
         private TextBox txtProducto;
         private Button btnEliminar;
-        private TextBox txtAlmacen;
         private Button btnGuardar;
         private Label label5;
         private TextBox txtIdProducto;

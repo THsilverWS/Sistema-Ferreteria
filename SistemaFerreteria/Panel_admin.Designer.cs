@@ -35,29 +35,20 @@
             button7 = new Button();
             button6 = new Button();
             btnProductos = new Button();
-            btnPerfil = new Button();
             btnPersonal = new Button();
             btnVentas = new Button();
             btnDashboard = new Button();
             panel4 = new Panel();
             panel3 = new Panel();
             panel2 = new Panel();
-            label2 = new Label();
             label1 = new Label();
             pictureBox1 = new PictureBox();
             panel5 = new Panel();
-            tableLayoutPanel1 = new TableLayoutPanel();
-            lblCorreo = new Label();
-            lblUsuario = new Label();
-            pbFotoUsuario = new PictureBox();
             panelContenedor = new Panel();
             dgvPedidos = new DataGridView();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
-            panel5.SuspendLayout();
-            tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pbFotoUsuario).BeginInit();
             panelContenedor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPedidos).BeginInit();
             SuspendLayout();
@@ -69,7 +60,6 @@
             panel1.Controls.Add(button7);
             panel1.Controls.Add(button6);
             panel1.Controls.Add(btnProductos);
-            panel1.Controls.Add(btnPerfil);
             panel1.Controls.Add(btnPersonal);
             panel1.Controls.Add(btnVentas);
             panel1.Controls.Add(btnDashboard);
@@ -89,9 +79,8 @@
             button1.FlatAppearance.BorderSize = 0;
             button1.FlatStyle = FlatStyle.Flat;
             button1.ForeColor = Color.Black;
-            button1.Image = (Image)resources.GetObject("button1.Image");
             button1.ImageAlign = ContentAlignment.MiddleLeft;
-            button1.Location = new Point(15, 325);
+            button1.Location = new Point(15, 280);
             button1.Name = "button1";
             button1.Size = new Size(262, 45);
             button1.TabIndex = 10;
@@ -143,7 +132,7 @@
             btnProductos.ForeColor = Color.Black;
             btnProductos.Image = (Image)resources.GetObject("btnProductos.Image");
             btnProductos.ImageAlign = ContentAlignment.MiddleLeft;
-            btnProductos.Location = new Point(15, 280);
+            btnProductos.Location = new Point(15, 235);
             btnProductos.Name = "btnProductos";
             btnProductos.Size = new Size(262, 45);
             btnProductos.TabIndex = 7;
@@ -151,24 +140,6 @@
             btnProductos.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnProductos.UseVisualStyleBackColor = true;
             btnProductos.Click += btnProductos_Click;
-            // 
-            // btnPerfil
-            // 
-            btnPerfil.Cursor = Cursors.Hand;
-            btnPerfil.Dock = DockStyle.Top;
-            btnPerfil.FlatAppearance.BorderSize = 0;
-            btnPerfil.FlatStyle = FlatStyle.Flat;
-            btnPerfil.ForeColor = Color.Black;
-            btnPerfil.Image = (Image)resources.GetObject("btnPerfil.Image");
-            btnPerfil.ImageAlign = ContentAlignment.MiddleLeft;
-            btnPerfil.Location = new Point(15, 235);
-            btnPerfil.Name = "btnPerfil";
-            btnPerfil.Size = new Size(262, 45);
-            btnPerfil.TabIndex = 6;
-            btnPerfil.Text = "  Perfil";
-            btnPerfil.TextImageRelation = TextImageRelation.ImageBeforeText;
-            btnPerfil.UseVisualStyleBackColor = true;
-            btnPerfil.Click += btnPerfil_Click;
             // 
             // btnPersonal
             // 
@@ -243,7 +214,6 @@
             // panel2
             // 
             panel2.BackColor = Color.Moccasin;
-            panel2.Controls.Add(label2);
             panel2.Controls.Add(label1);
             panel2.Controls.Add(pictureBox1);
             panel2.Dock = DockStyle.Top;
@@ -251,17 +221,6 @@
             panel2.Name = "panel2";
             panel2.Size = new Size(277, 100);
             panel2.TabIndex = 0;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label2.ForeColor = Color.Black;
-            label2.Location = new Point(64, 56);
-            label2.Name = "label2";
-            label2.Size = new Size(165, 17);
-            label2.TabIndex = 2;
-            label2.Text = "Creado por el mejor grupo";
             // 
             // label1
             // 
@@ -287,67 +246,11 @@
             // panel5
             // 
             panel5.BackColor = Color.Moccasin;
-            panel5.Controls.Add(tableLayoutPanel1);
             panel5.Dock = DockStyle.Top;
             panel5.Location = new Point(277, 0);
             panel5.Name = "panel5";
             panel5.Size = new Size(923, 56);
             panel5.TabIndex = 1;
-            // 
-            // tableLayoutPanel1
-            // 
-            tableLayoutPanel1.ColumnCount = 2;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 60F));
-            tableLayoutPanel1.Controls.Add(lblCorreo, 0, 1);
-            tableLayoutPanel1.Controls.Add(lblUsuario, 0, 0);
-            tableLayoutPanel1.Controls.Add(pbFotoUsuario, 1, 0);
-            tableLayoutPanel1.Dock = DockStyle.Right;
-            tableLayoutPanel1.Location = new Point(633, 0);
-            tableLayoutPanel1.Margin = new Padding(0);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.Padding = new Padding(10, 5, 10, 5);
-            tableLayoutPanel1.RowCount = 2;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.Size = new Size(290, 56);
-            tableLayoutPanel1.TabIndex = 2;
-            // 
-            // lblCorreo
-            // 
-            lblCorreo.AutoEllipsis = true;
-            lblCorreo.AutoSize = true;
-            lblCorreo.Dock = DockStyle.Fill;
-            lblCorreo.Font = new Font("Century Gothic", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblCorreo.Location = new Point(13, 28);
-            lblCorreo.Name = "lblCorreo";
-            lblCorreo.Size = new Size(204, 23);
-            lblCorreo.TabIndex = 2;
-            lblCorreo.Text = "correo@gmail.com";
-            lblCorreo.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // lblUsuario
-            // 
-            lblUsuario.AutoSize = true;
-            lblUsuario.Dock = DockStyle.Fill;
-            lblUsuario.Font = new Font("Century Gothic", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblUsuario.Location = new Point(13, 5);
-            lblUsuario.Name = "lblUsuario";
-            lblUsuario.Size = new Size(204, 23);
-            lblUsuario.TabIndex = 0;
-            lblUsuario.Text = "Usuario";
-            lblUsuario.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // pbFotoUsuario
-            // 
-            pbFotoUsuario.Location = new Point(223, 8);
-            pbFotoUsuario.Name = "pbFotoUsuario";
-            tableLayoutPanel1.SetRowSpan(pbFotoUsuario, 2);
-            pbFotoUsuario.Size = new Size(40, 40);
-            pbFotoUsuario.SizeMode = PictureBoxSizeMode.StretchImage;
-            pbFotoUsuario.TabIndex = 1;
-            pbFotoUsuario.TabStop = false;
             // 
             // panelContenedor
             // 
@@ -397,10 +300,6 @@
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
-            panel5.ResumeLayout(false);
-            tableLayoutPanel1.ResumeLayout(false);
-            tableLayoutPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)pbFotoUsuario).EndInit();
             panelContenedor.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvPedidos).EndInit();
             ResumeLayout(false);
@@ -418,17 +317,11 @@
         private Button button7;
         private Button button6;
         private Button btnProductos;
-        private Button btnPerfil;
         private Button btnPersonal;
         private Button btnVentas;
         private Panel panel5;
         private Panel panelContenedor;
-        private Label label2;
         private DataGridView dgvPedidos;
-        private Label lblCorreo;
-        private PictureBox pbFotoUsuario;
-        private Label lblUsuario;
-        private TableLayoutPanel tableLayoutPanel1;
         private Button button1;
     }
 }

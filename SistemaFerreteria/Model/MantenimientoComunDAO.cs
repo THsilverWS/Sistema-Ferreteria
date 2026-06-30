@@ -8,9 +8,8 @@ namespace SistemaFerreteria.Model
 {
     public class MantenimientoComunDAO
     {
-        private readonly Conexion conexionBase = new Conexion(); // Tu clase de conexión
+        private readonly Conexion conexionBase = new Conexion();
 
-        // Método auxiliar para obtener los nombres reales de las columnas según el tipo
         private void ObtenerConfiguracionTabla(string tipo, out string nombreTabla, out string campoId, out string campoTexto)
         {
             switch (tipo.ToUpper())
@@ -29,7 +28,6 @@ namespace SistemaFerreteria.Model
             }
         }
 
-        // 1. LISTAR / FILTRAR DATOS
         public DataTable ListarDatos(string tipo, string filtro = "")
         {
             DataTable dt = new DataTable();
@@ -52,7 +50,7 @@ namespace SistemaFerreteria.Model
             return dt;
         }
 
-        // 2. INSERTAR
+        // INSERTAR
         public bool Insertar(string tipo, string valorTexto)
         {
             ObtenerConfiguracionTabla(tipo, out string tabla, out string id, out string texto);
@@ -69,7 +67,7 @@ namespace SistemaFerreteria.Model
             }
         }
 
-        // 3. MODIFICAR
+        // MODIFICAR
         public bool Modificar(string tipo, int idRegistro, string nuevoTexto)
         {
             ObtenerConfiguracionTabla(tipo, out string tabla, out string id, out string texto);
@@ -87,7 +85,7 @@ namespace SistemaFerreteria.Model
             }
         }
 
-        // 4. ELIMINAR
+        // ELIMINAR
         public bool Eliminar(string tipo, int idRegistro)
         {
             ObtenerConfiguracionTabla(tipo, out string tabla, out string id, out string texto);

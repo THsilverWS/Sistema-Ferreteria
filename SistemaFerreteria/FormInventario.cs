@@ -2,13 +2,12 @@
 using System;
 using System.Data;
 using System.Windows.Forms;
-using SistemaFerreteria.Model; // 🌟 Agregado para usar tu clase centralizada Conexion
+using SistemaFerreteria.Model;
 
 namespace SistemaFerreteria
 {
     public partial class FormInventario : Form
     {
-        // 🌟 Reemplazamos la cadena directa por tu objeto de conexión centralizado
         private readonly Conexion conexionBase = new Conexion();
 
         public FormInventario()
@@ -23,17 +22,13 @@ namespace SistemaFerreteria
             CargarStock();
         }
 
-        // =================================
-        // 1. CARGAR STOCK DESDE SQL SERVER
-        // =================================
         public void CargarStock()
         {
             try
             {
-                // 🌟 Ajustado con conexionBase
+
                 using (SqlConnection conexion = conexionBase.ObtenerConexion())
                 {
-                    // 🌟 CORREGIDO: Eliminamos 'AND I.id_almacen = 1' ya que el inventario ahora es global
                     string query = @"
                         SELECT 
                             P.id_producto AS [Id],
@@ -61,9 +56,6 @@ namespace SistemaFerreteria
             }
         }
 
-        // ====================================
-        // 2. GUARDAR O ACTUALIZAR UN PRODUCTO
-        // ====================================
         private void btnGuardar_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtCodBarras.Text) || string.IsNullOrWhiteSpace(txtNombre.Text) ||
@@ -85,16 +77,12 @@ namespace SistemaFerreteria
                 return;
             }
 
-            // 🌟 Ajustado con conexionBase
             using (SqlConnection conexion = conexionBase.ObtenerConexion())
             {
                 try
                 {
                     conexion.Open();
 
-                    // =========================================================================
-                    // 🌟 FIRMAMOS EL CONTEXTO DE SEGURIDAD ANTES DE LA TRANSACCIÓN PARA LOS TRIGGERS
-                    // =========================================================================
                     conexionBase.AsignarContextoSeguridad(conexion);
 
                     using (SqlTransaction transaccion = conexion.BeginTransaction())
@@ -118,7 +106,6 @@ namespace SistemaFerreteria
                                     idProductoGenerado = Convert.ToInt32(cmdProd.ExecuteScalar());
                                 }
 
-                                // 🌟 CORREGIDO: Removida la columna y el valor de id_almacen en el INSERT
                                 string queryInv = @"INSERT INTO Inventario (id_producto, stock_actual, stock_minimo, fec_actualizacion) 
                                                     VALUES (@idProd, @stock, 5, GETDATE());";
 
@@ -148,7 +135,6 @@ namespace SistemaFerreteria
                                     cmdUpd.ExecuteNonQuery();
                                 }
 
-                                // 🌟 CORREGIDO: Removido 'AND id_almacen = 1' en el UPDATE
                                 string queryUpdInv = @"UPDATE Inventario 
                                                        SET stock_actual = @stock, fec_actualizacion = GETDATE() 
                                                        WHERE id_producto = @idProd";
@@ -181,9 +167,6 @@ namespace SistemaFerreteria
             }
         }
 
-        // =========================================================
-        // 3. SELECCIONAR FILA PARA PASARLA A LOS CAMPOS DE EDICIÓN
-        // =========================================================
         private void dgvProductos_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
@@ -198,9 +181,6 @@ namespace SistemaFerreteria
             }
         }
 
-        // =========================================================
-        // 4. LIMPIAR EL FORMULARIO
-        // =========================================================
         private void Limpiar()
         {
             lblId.Text = "";
@@ -216,9 +196,6 @@ namespace SistemaFerreteria
             Limpiar();
         }
 
-        // =========================================================
-        // 5. ELIMINAR EL PRODUCTO SELECCIONADO
-        // =========================================================
         private void btnEliminar_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(lblId.Text))
@@ -234,21 +211,18 @@ namespace SistemaFerreteria
             {
                 int idProducto = Convert.ToInt32(lblId.Text);
 
-                // 🌟 Ajustado con conexionBase
                 using (SqlConnection conexion = conexionBase.ObtenerConexion())
                 {
                     try
                     {
                         conexion.Open();
 
-                        // 🌟 FIRMAMOS EL CONTEXTO ANTES DE ELIMINAR PARA LOS TRIGGERS DE LOGS
                         conexionBase.AsignarContextoSeguridad(conexion);
 
                         using (SqlTransaction transaccion = conexion.BeginTransaction())
                         {
                             try
                             {
-                                // 1. Eliminamos primero el registro en Inventario por restricción FK
                                 string queryInv = "DELETE FROM Inventario WHERE id_producto = @idProd";
                                 using (SqlCommand cmdInv = new SqlCommand(queryInv, conexion, transaccion))
                                 {
@@ -256,7 +230,6 @@ namespace SistemaFerreteria
                                     cmdInv.ExecuteNonQuery();
                                 }
 
-                                // 2. Eliminamos el registro en la tabla Productos
                                 string queryProd = "DELETE FROM Productos WHERE id_producto = @idProd";
                                 using (SqlCommand cmdProd = new SqlCommand(queryProd, conexion, transaccion))
                                 {

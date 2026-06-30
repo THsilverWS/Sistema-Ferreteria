@@ -42,7 +42,6 @@
             txtId = new TextBox();
             label4 = new Label();
             btnLimpiar = new Button();
-            btnExportar = new Button();
             btnActualizar = new Button();
             btnEliminar = new Button();
             btnGuardar = new Button();
@@ -76,7 +75,6 @@
             panel4.Controls.Add(txtId);
             panel4.Controls.Add(label4);
             panel4.Controls.Add(btnLimpiar);
-            panel4.Controls.Add(btnExportar);
             panel4.Controls.Add(btnActualizar);
             panel4.Controls.Add(btnEliminar);
             panel4.Controls.Add(btnGuardar);
@@ -160,7 +158,7 @@
             // 
             // btnEditar
             // 
-            btnEditar.Location = new Point(106, 195);
+            btnEditar.Location = new Point(149, 192);
             btnEditar.Name = "btnEditar";
             btnEditar.Size = new Size(75, 23);
             btnEditar.TabIndex = 16;
@@ -173,6 +171,7 @@
             txtId.Location = new Point(147, 65);
             txtId.MaxLength = 8;
             txtId.Name = "txtId";
+            txtId.ReadOnly = true;
             txtId.Size = new Size(159, 23);
             txtId.TabIndex = 13;
             // 
@@ -187,7 +186,7 @@
             // 
             // btnLimpiar
             // 
-            btnLimpiar.Location = new Point(433, 197);
+            btnLimpiar.Location = new Point(476, 194);
             btnLimpiar.Name = "btnLimpiar";
             btnLimpiar.Size = new Size(75, 23);
             btnLimpiar.TabIndex = 11;
@@ -195,19 +194,9 @@
             btnLimpiar.UseVisualStyleBackColor = true;
             btnLimpiar.Click += btnLimpiar_Click;
             // 
-            // btnExportar
-            // 
-            btnExportar.Location = new Point(541, 197);
-            btnExportar.Name = "btnExportar";
-            btnExportar.Size = new Size(75, 23);
-            btnExportar.TabIndex = 10;
-            btnExportar.Text = "Exportar";
-            btnExportar.UseVisualStyleBackColor = true;
-            btnExportar.Click += btnExportar_Click;
-            // 
             // btnActualizar
             // 
-            btnActualizar.Location = new Point(335, 197);
+            btnActualizar.Location = new Point(378, 194);
             btnActualizar.Name = "btnActualizar";
             btnActualizar.Size = new Size(75, 23);
             btnActualizar.TabIndex = 9;
@@ -217,7 +206,7 @@
             // 
             // btnEliminar
             // 
-            btnEliminar.Location = new Point(215, 197);
+            btnEliminar.Location = new Point(258, 194);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(75, 23);
             btnEliminar.TabIndex = 8;
@@ -226,7 +215,7 @@
             // 
             // btnGuardar
             // 
-            btnGuardar.Location = new Point(12, 195);
+            btnGuardar.Location = new Point(55, 192);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(75, 23);
             btnGuardar.TabIndex = 6;
@@ -301,7 +290,6 @@
         private Panel panel3;
         private TextBox txtNombre;
         private Label label1;
-        private Button btnExportar;
         private Button btnActualizar;
         private Button btnEliminar;
         private Button btnGuardar;

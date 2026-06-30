@@ -6,9 +6,8 @@ namespace SistemaFerreteria.Model
 {
     public class InventarioDAO
     {
-        private readonly Conexion conexionBase = new Conexion(); // Ajusta al nombre de tu clase de conexión
+        private readonly Conexion conexionBase = new Conexion();
 
-        // 1. Obtener inventario paginado uniendo los nombres legibles de productos y almacenes
         public DataTable ObtenerInventarioPorPagina(int numeroPagina, int tamañoPagina, string buscar = "")
         {
             DataTable tabla = new DataTable();
@@ -16,7 +15,6 @@ namespace SistemaFerreteria.Model
 
             using (SqlConnection con = conexionBase.ObtenerConexion())
             {
-                // 🌟 CORREGIDO: Eliminamos el INNER JOIN con Almacen y sus columnas de la consulta
                 string query = @"
                     SELECT 
                         i.id_producto AS [ID Producto],
@@ -54,7 +52,6 @@ namespace SistemaFerreteria.Model
             return tabla;
         }
 
-        // 2. Contar el total de registros para la paginación
         public int ObtenerTotalInventario(string buscar = "")
         {
             using (SqlConnection con = conexionBase.ObtenerConexion())
@@ -75,12 +72,10 @@ namespace SistemaFerreteria.Model
             }
         }
 
-        // 3. Actualizar los niveles de stock (Fijando la PK compuesta)
         public bool UpdateStock(int idProducto, int stockActual, int stockMinimo)
         {
             using (SqlConnection con = conexionBase.ObtenerConexion())
             {
-                // Quitamos id_almacen del WHERE ya que el stock ahora es global por producto
                 string query = @"UPDATE Inventario 
                          SET stock_actual = @StockActual, 
                              stock_minimo = @StockMinimo, 
@@ -96,7 +91,6 @@ namespace SistemaFerreteria.Model
                     try
                     {
                         con.Open();
-                        // Inyectamos el contexto para la auditoría que acabamos de armar
                         conexionBase.AsignarContextoSeguridad(con);
                         return cmd.ExecuteNonQuery() > 0;
                     }
@@ -106,6 +100,39 @@ namespace SistemaFerreteria.Model
                     }
                 }
             }
+        }
+        public DataTable ObtenerTodoElInventario()
+        {
+            DataTable dt = new DataTable();
+            using (SqlConnection con = conexionBase.ObtenerConexion())
+            {
+                string query = @"
+            SELECT 
+                P.id_producto AS [ID Producto],
+                P.nom_producto AS [Producto],
+                ISNULL(I.stock_actual, 0) AS [Stock Actual],
+                ISNULL(I.stock_minimo, 5) AS [Stock Mínimo]
+            FROM Productos P
+            LEFT JOIN Inventario I ON P.id_producto = I.id_producto
+            ORDER BY P.nom_producto ASC";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    try
+                    {
+                        con.Open();
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Error al obtener inventario completo: " + ex.Message);
+                    }
+                }
+            }
+            return dt;
         }
     }
 }

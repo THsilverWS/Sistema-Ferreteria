@@ -29,7 +29,6 @@ namespace SistemaFerreteria
             {
                 dgvDatos.DataSource = _dao.ListarDatos(_tipoMantenimiento, filtro);
 
-                // Forzamos el nombre de la cabecera de la grilla para que quede limpio
                 if (dgvDatos.Columns.Contains("Nombre"))
                 {
                     dgvDatos.Columns["Nombre"].HeaderText = _tipoMantenimiento == "ESTANTE" ? "Ubicación Estante" : "Nombre";
@@ -49,7 +48,6 @@ namespace SistemaFerreteria
                 txtId.Text = fila.Cells["ID"].Value.ToString();
                 txtNombre.Text = fila.Cells["Nombre"].Value.ToString();
 
-                // Cambios de estado de botones dinámicos
                 btnGuardar.Enabled = false;
                 btnEditar.Enabled = true;
                 btnEliminar.Enabled = true;
@@ -153,7 +151,7 @@ namespace SistemaFerreteria
             FormExportarImportar frm = new FormExportarImportar("IMPORTAR", _tipoMantenimiento, null);
     if (frm.ShowDialog() == DialogResult.OK)
     {
-                RefrescarTabla(); // Recarga la grilla al terminar[cite: 2, 3]
+                RefrescarTabla(); 
             }
         }
     }

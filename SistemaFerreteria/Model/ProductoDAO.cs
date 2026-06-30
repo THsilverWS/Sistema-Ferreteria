@@ -8,13 +8,9 @@ namespace SistemaFerreteria.Model
     {
         private readonly Conexion conexionBase = new Conexion();
 
-        /// <summary>
-        /// Lista todos los productos mapeando las llaves foráneas y trayendo el stock desde Inventario.
-        /// </summary>
         public DataTable ListarProductos()
         {
             DataTable tabla = new DataTable();
-            // Corregido: Prov.raz_proveedor y Est.ubi_estante según tus scripts reales
             string query = @"SELECT P.id_producto AS [ID], 
                             P.cod_barras AS [Código de Barras], 
                             P.nom_producto AS [Producto], 
@@ -52,9 +48,6 @@ namespace SistemaFerreteria.Model
             return tabla;
         }
 
-        /// <summary>
-        /// Inserta un producto basándose estrictamente en las columnas de tu tabla real (Cumple RF04).
-        /// </summary>
         public bool InsertarProducto(string codigoBarras, string nombre, string descripcion, int idCategoria,
                                       string rucProveedor, int idEstante, decimal precioCompra, decimal precioVenta)
         {
@@ -91,13 +84,10 @@ namespace SistemaFerreteria.Model
         public DataTable ObtenerProductosPorPagina(int numeroPagina, int tamañoPagina)
         {
             DataTable tabla = new DataTable();
-            // Fórmula: si estás en la página 1, se salta (1-1)*10 = 0 registros.
-            // Si estás en la página 2, se salta (2-1)*10 = 10 registros.
             int registrosSaltados = (numeroPagina - 1) * tamañoPagina;
 
             using (SqlConnection con = conexionBase.ObtenerConexion())
             {
-                // IMPORTANTE: OFFSET requiere obligatoriamente un ORDER BY
                 string query = @"SELECT id_producto AS [ID], 
                         cod_barras AS [Código de Barras], 
                         nom_producto AS [Producto], 
@@ -170,7 +160,7 @@ namespace SistemaFerreteria.Model
         public DataTable ObtenerProveedores()
         {
             DataTable tabla = new DataTable();
-            string query = "SELECT ruc_proveedor, raz_proveedor FROM Proveedores"; // 'raz_proveedor'
+            string query = "SELECT ruc_proveedor, raz_proveedor FROM Proveedores";
             using (SqlConnection con = conexionBase.ObtenerConexion())
             {
                 using (SqlCommand cmd = new SqlCommand(query, con))
@@ -185,7 +175,7 @@ namespace SistemaFerreteria.Model
         public DataTable ObtenerEstantes()
         {
             DataTable tabla = new DataTable();
-            string query = "SELECT id_estante, ubi_estante FROM Estantes"; // 'ubi_estante' 
+            string query = "SELECT id_estante, ubi_estante FROM Estantes"; 
             using (SqlConnection con = conexionBase.ObtenerConexion())
             {
                 using (SqlCommand cmd = new SqlCommand(query, con))
@@ -196,9 +186,6 @@ namespace SistemaFerreteria.Model
             }
             return tabla;
         }
-        /// <summary>
-        /// Modifica los datos de un producto existente basándose en su ID (UPDATE).
-        /// </summary>
         public bool EditarProducto(int idProducto, string codigoBarras, string nombre, string descripcion,
                                     int idCategoria, string rucProveedor, int idEstante, decimal precioCompra, decimal precioVenta)
         {
@@ -243,9 +230,6 @@ namespace SistemaFerreteria.Model
 
 
         }
-        /// <summary>
-        /// Elimina físicamente un producto de la base de datos utilizando su ID.
-        /// </summary>
         public bool EliminarProducto(int idProducto)
         {
             using (SqlConnection con = conexionBase.ObtenerConexion())
@@ -265,8 +249,7 @@ namespace SistemaFerreteria.Model
                     }
                     catch (SqlException ex)
                     {
-                        // Si el producto está en otra tabla (llave foránea), saltará aquí
-                        if (ex.Number == 547) // Código de error de restricción FK en SQL Server
+                        if (ex.Number == 547) 
                         {
                             throw new Exception("No se puede eliminar este producto porque tiene movimientos de inventario o ventas asociadas.");
                         }
@@ -275,14 +258,11 @@ namespace SistemaFerreteria.Model
                 }
             }
         }
-        /// <summary>
-        /// Vacía por completo la tabla de productos y reinicia el contador de IDs.
-        /// </summary>
+
         public bool VaciarTablaProductos()
         {
             using (SqlConnection con = conexionBase.ObtenerConexion())
             {
-                // Limpiamos absolutamente todo el historial de pruebas en el orden correcto
                 string query = @"DELETE FROM HistorialInventario;
                          DELETE FROM Inventario;
                          DELETE FROM DetalleVentas;
